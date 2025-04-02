@@ -10,7 +10,7 @@ List<Initiative> completedInitiatives = [
     description: "مبادرة تهدف لتحسين مستقبل الشباب من خلال التعليم والتدريب.",
     participants: 200,
     date: "22/4/2025",
-    imageUrl: "assets/initiative/IMG_8667.png",
+    imageUrl: "assets/initiative/IMG_8667.PNG",
   ),
   Initiative(
     id: 2,
@@ -19,7 +19,7 @@ List<Initiative> completedInitiatives = [
     description: "حملة توعية لتنظيف الشواطئ والمساحات العامة.",
     participants: 150,
     date: "15/5/2025",
-    imageUrl: "assets/initiative/IMG_8668.jpg",
+    imageUrl: "assets/initiative/IMG_8668.JPG",
   ),
 
   Initiative(
@@ -29,7 +29,7 @@ List<Initiative> completedInitiatives = [
     description: "مبادرة تهدف لتحسين مستقبل الشباب من خلال التعليم والتدريب.",
     participants: 200,
     date: "22/4/2025",
-    imageUrl: "assets/initiative/IMG_8669.jpg",
+    imageUrl: "assets/initiative/IMG_8669.JPG",
   ),
 ];
 
@@ -41,7 +41,7 @@ List<Initiative> ongoingInitiatives = [
     description: "برنامج لتعليم الأطفال والشباب أساسيات البرمجة والتكنولوجيا.",
     participants: 300,
     date: "10/6/2025",
-    imageUrl: "assets/initiative/IMG_8670.jpg",
+    imageUrl: "assets/initiative/IMG_8670.JPG",
   ),
   Initiative(
     id: 4,
@@ -50,6 +50,6 @@ List<Initiative> ongoingInitiatives = [
     description: "حملة تهدف لنشر الوعي حول العادات الصحية والتغذية السليمة.",
     participants: 250,
     date: "5/7/2025",
-    imageUrl: "assets/initiative/IMG_8671.jpg",
+    imageUrl: "assets/initiative/IMG_8671.JPG",
   ),
 ];

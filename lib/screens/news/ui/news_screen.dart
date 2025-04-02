@@ -65,12 +65,19 @@ class NewsScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              // Image.asset('assets/news/IMG_8661.jpg',
+              //   height: 200.h,
+              //   width: double.infinity,
+              //   fit: BoxFit.cover,
+              // ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.arrow_back),
+                    IconButton(onPressed: (){
+                      Navigator.pop(context);
+                    }, icon: Icon(Icons.arrow_back)),
                     Text('اخر الأخبار',
                       style: TextStyle(
                         color: Colors.black,
@@ -116,7 +123,7 @@ class NewsScreen extends StatelessWidget {
                                     color: Colors.grey.shade400,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Image.asset('${item.image}',fit: BoxFit.cover,),
+                                  child: Image.asset('${item.image}',fit: BoxFit.cover,width: double.infinity,),
                                 ),
                                 Column(
                                   children: [
@@ -132,10 +139,10 @@ class NewsScreen extends StatelessWidget {
                                     ),
 
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 20),
+                                      padding: const EdgeInsets.only(right: 20,left: 10),
                                       child: Align(
                                           alignment: AlignmentDirectional.topStart,
-                                          child: Text(item.details)),
+                                          child: Text(item.details,maxLines: 1,overflow: TextOverflow.ellipsis,)),
                                     ),
 
                                     Padding(
@@ -145,7 +152,8 @@ class NewsScreen extends StatelessWidget {
                                           Spacer(),
                                           Icon(Icons.date_range),
                                           horizontalSpace(5),
-                                          Text(item.newsDate.toString()),
+                                          Text(item.newsDate,
+                                          overflow: TextOverflow.ellipsis,),
                                         ],
                                       ),
                                     ),

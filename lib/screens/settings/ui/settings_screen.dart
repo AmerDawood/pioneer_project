@@ -14,6 +14,7 @@ import 'package:pioneer_project/screens/settings/ui/contact_us_screen.dart';
 import 'package:pioneer_project/screens/settings/ui/widgets/setting_listtile_widget.dart';
 import 'package:pioneer_project/theming/colors.dart';
 
+import '../../auth/initiative-login/login_screen.dart';
 import '../../profile/ui/profile_screen.dart';
 class SettingsScreen extends StatelessWidget with Helpers {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -184,9 +185,9 @@ class SettingsScreen extends StatelessWidget with Helpers {
                 title: Text('تسجيل كصاحب مبادرات'),
                 leadingIcon: Icon(Icons.lock),
                 function: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (c){
-                  //           return RegisterScreen();
-                  //         }));
+                  Navigator.push(context, MaterialPageRoute(builder: (c){
+                            return InitiativeOwnerLoginScreen();
+                          }));
                 },
               ),
 

@@ -12,6 +12,7 @@ import '../../helpers/spacing.dart';
 import '../../theming/colors.dart';
 import '../../widgets/app_text_form_field.dart';
 import '../initiative/initiatives_screen.dart';
+import '../news/ui/news_details_screen.dart';
 import '../news/ui/news_screen.dart';
 import '../organizations/all_organizations_screen.dart';
 import '../profile/ui/profile_screen.dart';
@@ -115,95 +116,104 @@ class HomeScreen extends StatelessWidget {
                                final newsItem = news[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                      height: 200.h,
-                      width: 170.w,
-                      decoration: BoxDecoration(
-                        // color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.grey.shade200),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade100,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 90.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                              ),
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context,MaterialPageRoute(builder: (c){
+                            return NewsDetailsScreen();
+                          }));
+                        },
+                        child: Container(
+                        height: 200.h,
+                        width: 170.w,
+                        decoration: BoxDecoration(
+                          // color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey.shade200),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade100,
                             ),
-                            child: Image.asset('${newsItem.image}',fit: BoxFit.cover,),
-                            // child: Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: SvgPicture.asset(Images.logo),
-                            // ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
                               height: 90.h,
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                // color: Colors.amber,
+                                color: Colors.grey.shade200,
                                 borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
                                 ),
                               ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${newsItem.title}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 17.sp,
-                                        ),
-                                      )
-                                    ],
+                              child: Image.asset('${newsItem.image}',fit: BoxFit.cover,),
+                              // child: Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: SvgPicture.asset(Images.logo),
+                              // ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 90.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  // color: Colors.amber,
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${newsItem.details}',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 17.sp,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  verticalSpace(4),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${newsItem.newsDate.toString()}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14.sp,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${newsItem.title}',
+                                          maxLines: 1,
+                                          style: TextStyle(
+
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 17.sp,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'لإظهار جزء من النص فقط',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 15.sp,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    verticalSpace(4),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${newsItem.newsDate}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14.sp,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                                            ),
                       ),
-                                          ),
                     );
                   },
                  ),
@@ -302,9 +312,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      Center(
-                        child: Image.asset('assets/offers/IMG_8666.jpg',fit: BoxFit.cover,)
-                        ),
+                      Image.asset('assets/offers/IMG_8666.JPG',fit: BoxFit.cover,width: double.infinity,),
                       Column(
                         children: [
                           Padding(
@@ -327,7 +335,7 @@ class HomeScreen extends StatelessWidget {
                                 child: Text(
                                   'الوصف الوصف الوصف الوصف الوصف الوصف الوصف ',
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 17,
                                       fontWeight: FontWeight.w500),
                                 ),

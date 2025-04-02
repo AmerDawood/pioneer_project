@@ -78,113 +78,116 @@ class _RegisterScreenState extends State<RegisterScreen>with Helpers {
                   topLeft: Radius.circular(10),
                 ),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        AppTextFormField(
-                          controller: _nameEditingController,
-                          hintText: 'الاسم كامل',
-                          // suffixIcon: Icon(Icons.email),
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.grey,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          AppTextFormField(
+                            controller: _nameEditingController,
+                            hintText: 'الاسم كامل',
+                            // suffixIcon: Icon(Icons.email),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          AppTextFormField(
+                            controller: _emailEditingController,
+                            hintText: 'الايميل',
+                            // suffixIcon: Icon(Icons.email),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                     Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          AppTextFormField(
+                            controller: _phoneEditingController,
+                            hintText: 'رقم الهاتف',
+                            // suffixIcon: Icon(Icons.email),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          AppTextFormField(
+                            controller: _passwordEditingController,
+                            hintText: 'كلمة المرور',
+                            suffixIcon: Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.grey,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 10, bottom: 7),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     children: [Text('pla pla pla pla ')],
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Divider(color: Colors.grey, thickness: 2),
+                    //       ),
+                    //       Padding(
+                    //         padding: EdgeInsets.symmetric(
+                    //             horizontal: 8), // Adds spacing around the text
+                    //         child: Text('الدخول بواسطة'),
+                    //       ),
+                    //       Expanded(
+                    //         child: Divider(color: Colors.grey, thickness: 2),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // GoogleSignInWidget(),
+                    verticalSpace(10),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: AppTextButton(
+                          buttonText: 'تسجيل',
+                          textStyle: TextStyle(
+                            color: Colors.white,
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        AppTextFormField(
-                          controller: _emailEditingController,
-                          hintText: 'الايميل',
-                          // suffixIcon: Icon(Icons.email),
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.grey,
+                          onPressed: () => performRegister()
                           ),
-                        )
-                      ],
                     ),
-                  ),
-                   Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        AppTextFormField(
-                          controller: _phoneEditingController,
-                          hintText: 'رقم الهاتف',
-                          // suffixIcon: Icon(Icons.email),
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        AppTextFormField(
-                          controller: _passwordEditingController,
-                          hintText: 'كلمة المرور',
-                          suffixIcon: Icon(
-                            Icons.remove_red_eye,
-                            color: Colors.grey,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.grey,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, bottom: 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [Text('pla pla pla pla ')],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Divider(color: Colors.grey, thickness: 2),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 8), // Adds spacing around the text
-                          child: Text('الدخول بواسطة'),
-                        ),
-                        Expanded(
-                          child: Divider(color: Colors.grey, thickness: 2),
-                        ),
-                      ],
-                    ),
-                  ),
-                  GoogleSignInWidget(),
-                  verticalSpace(10),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AppTextButton(
-                        buttonText: 'تسجيل',
-                        textStyle: TextStyle(
-                          color: Colors.white,
-                        ),
-                        onPressed: () => performRegister()
-                        ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

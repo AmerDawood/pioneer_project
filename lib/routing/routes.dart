@@ -26,5 +26,6 @@ class Routes {
   static const String settingsScreen = '/settingsScreen';
   static const String chatScreen = '/chatScreen';
   static const String allOrganizationsScreen = '/allOrganizationsScreen';
+  static const String ownerScreen = '/ownerScreen';
 
 }

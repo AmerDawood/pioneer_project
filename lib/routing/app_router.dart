@@ -25,6 +25,8 @@ import 'package:pioneer_project/screens/settings/ui/settings_screen.dart';
 import 'package:pioneer_project/screens/settings/ui/terms_screen.dart';
 import 'package:pioneer_project/screens/splash/splash_screen.dart';
 
+import '../screens/owner/owner_screen.dart';
+
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     //this arguments to be passed in any screen like this ( arguments as ClassName )
@@ -139,6 +141,13 @@ class AppRouter {
             return MaterialPageRoute(
               builder: (_) => const AllOrganizationsScreen(),
             );
+
+      case Routes.ownerScreen:
+        return MaterialPageRoute(
+          builder: (_) => const OwnerDashboardScreen(),
+        );
+
+
 
       // case Routes.loginScreen:
       //   return MaterialPageRoute(

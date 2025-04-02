@@ -2,14 +2,14 @@ import 'package:pioneer_project/models/organization_model.dart';
 
 final List<Organization> organizations = [
   Organization(
-    logoPath: 'assets/organizations/IMG_8672.png',
-    title: "جمعية الإحسان",
+    logoPath: 'assets/organizations/IMG_8673.PNG',
+    title: "جمعية",
   ),
-  Organization(logoPath: 'assets/organizations/IMG_8673.png', title: "مؤسسة الأمل"),
-  Organization(logoPath: 'assets/organizations/IMG_8674.png', title: "جمعية التنمية"),
-  Organization(logoPath: 'assets/organizations/IMG_8675.png', title: "منظمة الرؤية"),
-  Organization(logoPath: 'assets/organizations/IMG_8676.png', title: "مركز الإبداع"),
-  Organization(logoPath: 'assets/organizations/IMG_8673.png', title: "مؤسسة الخير"),
-  Organization(logoPath: 'assets/organizations/IMG_8672.png', title: "مبادرة التطوع"),
-  Organization(logoPath: 'assets/organizations/IMG_8672.png', title: "مركز الشباب"),
+  Organization(logoPath: 'assets/organizations/IMG_8673.PNG', title: "مؤسسة الأمل"),
+  Organization(logoPath: 'assets/organizations/IMG_8674.PNG', title: "جمعية التنمية"),
+  Organization(logoPath: 'assets/organizations/IMG_8675.JPG', title: "منظمة الرؤية"),
+  Organization(logoPath: 'assets/organizations/IMG_8676.PNG', title: "مركز الإبداع"),
+  Organization(logoPath: 'assets/organizations/IMG_8673.PNG', title: "مؤسسة الخير"),
+  Organization(logoPath: 'assets/organizations/IMG_8672.PNG', title: "مبادرة التطوع"),
+  Organization(logoPath: 'assets/organizations/IMG_8672.PNG', title: "مركز الشباب"),
 ];

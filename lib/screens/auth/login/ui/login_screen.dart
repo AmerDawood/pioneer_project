@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
             ),
 
             Container(
-              height: 455.h,width: double.infinity,
+              height: 500.h,width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -74,7 +74,12 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 topRight: Radius.circular(20),
               ),
             ),
-            child:  EmailAndPassword(),
+            child:  Padding(
+              padding: EdgeInsets.only(
+                top: 60.h,
+              ),
+              child: EmailAndPassword(),
+            ),
             ),
 
 

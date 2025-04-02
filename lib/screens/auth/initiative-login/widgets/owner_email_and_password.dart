@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pioneer_project/api/controller/auth_api_controller.dart';
 import 'package:pioneer_project/helpers/helpers.dart';
 import 'package:pioneer_project/screens/home/app.dart';
+import 'package:pioneer_project/screens/owner/owner_screen.dart';
 
 import '../../../../../helpers/spacing.dart';
 import '../../../../../widgets/app_text_button.dart';
@@ -11,14 +12,14 @@ import 'dont_hav_an_account_widget.dart';
 import 'forget_password_widgets.dart';
 import 'google_signin_widget.dart';
 
-class EmailAndPassword extends StatefulWidget {
-  const EmailAndPassword({super.key});
+class OwnerEmailAndPassword extends StatefulWidget {
+  const OwnerEmailAndPassword({super.key});
 
   @override
-  State<EmailAndPassword> createState() => _EmailAndPasswordState();
+  State<OwnerEmailAndPassword> createState() => _EmailAndPasswordState();
 }
 
-class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
+class _EmailAndPasswordState extends State<OwnerEmailAndPassword> with Helpers {
 
   late TextEditingController _emailEditingController;
   late TextEditingController _passwordEditingController;
@@ -91,7 +92,10 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          performLogin();
+                          Navigator.push(context, MaterialPageRoute(builder: (_){
+                            return OwnerDashboardScreen();
+                          }));
+                          // performLogin();
                           // if (_loginValidation.validateInputs()) {
                         
                           // } else {
@@ -153,7 +157,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
         password: _passwordEditingController.text);
     if (status) {
       Navigator.push(context, MaterialPageRoute(builder: (_){
-        return AppScreen();
+        return OwnerDashboardScreen();
       }));
       showSnackBar(context: context, message: 'Logged In Successfully', error: false);
 

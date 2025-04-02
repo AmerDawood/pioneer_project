@@ -69,10 +69,23 @@ flutter:
   assets:
     - assets/splash/splash.svg
     - assets/onboarding/
-    - assets/news/
-    - assets/organizations/
-    - assets/initiative/
-    - assets/offers/
+    - assets/news/IMG_8661.jpg
+    - assets/news/IMG_8663.jpg
+    - assets/news/IMG_8664.jpg
+    - assets/news/IMG_8665.jpg
+    - assets/organizations/IMG_8672.PNG
+    - assets/organizations/IMG_8673.PNG
+    - assets/organizations/IMG_8674.PNG
+    - assets/organizations/IMG_8676.PNG
+
+
+    - assets/initiative/IMG_8667.PNG
+    - assets/initiative/IMG_8668.JPG
+    - assets/initiative/IMG_8669.JPG
+    - assets/initiative/IMG_8670.JPG
+    - assets/initiative/IMG_8671.JPG
+
+    - assets/offers/IMG_8666.JPG
 
 
 

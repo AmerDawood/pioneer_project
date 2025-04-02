@@ -5,7 +5,7 @@ class News {
   final String title;
   final String details;
   final String? image;
-  final DateTime newsDate;
+  final String newsDate;
   final int organizationId;
   final Organization? organization;
 
@@ -25,7 +25,7 @@ class News {
       title: json['title'],
       details: json['details'],
       image: json['image'],
-      newsDate: DateTime.parse(json['news_date']),
+      newsDate:json['news_date'],
       organizationId: json['organization_id'],
       organization: json['organization'] != null
           ? Organization.fromJson(json['organization'])
@@ -39,7 +39,7 @@ class News {
       'title': title,
       'details': details,
       'image': image,
-      'news_date': newsDate.toIso8601String(),
+      'news_date': newsDate,
       'organization_id': organizationId,
       'organization': organization?.toJson(),
     };

@@ -98,7 +98,7 @@ class NewsDetailsScreen extends StatelessWidget {
                   color: Colors.grey.shade300,
                     borderRadius: BorderRadius.circular(20)
                   ),
-                  child: Image.asset('assets/news/IMG_8661.jpg',fit: BoxFit.cover,),
+                  child: Image.asset('assets/news/IMG_8661.JPG',fit: BoxFit.cover,),
                 ),
               ),
 
@@ -160,7 +160,7 @@ class NewsDetailsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(' الوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصف الوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصفالوصف الوصف الوصف',
-
+                    maxLines: 1,
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 17,

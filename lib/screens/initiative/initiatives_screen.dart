@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pioneer_project/dummy_data/initiatives.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/screens/initiative/join.dart';
 
 import '../../helpers/spacing.dart';
 import '../../theming/colors.dart';
@@ -202,69 +203,76 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                             final compleateItem = completedInitiatives[index];
                             return   Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 300.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.grey.shade100,
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 150.h,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.grey.shade400,
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (c){
+                                return JoinInitiativeScreen();
+                              }));
+                            },
+                            child: Container(
+                              height: 300.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.grey.shade100,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 150.h,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.grey.shade400,
+                                    ),
+                                    child: Image.asset('${compleateItem.imageUrl}',fit: BoxFit.cover,),
                                   ),
-                                  child: Image.asset('${compleateItem.imageUrl}',fit: BoxFit.cover,),
-                                ),
-                        
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Text('${compleateItem.title}'),
-                                          Spacer(),
-                                          Text('${compleateItem.organization}'),
-                        
-                                        ],
+                                                    
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Text('${compleateItem.title}'),
+                                            Spacer(),
+                                            Text('${compleateItem.organization}'),
+                                                    
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                        
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('${compleateItem.description}'),
-                                    ),
-                        
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.add),
-                                              Text('${compleateItem.participants}')
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          Row(
-                                            children: [
-                                              Icon(Icons.date_range),
-                                              horizontalSpace(6),
-                                              Text('${compleateItem.date}')
-                                            ],
-                                          ),
-                        
-                                        ],
+                                                    
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('${compleateItem.description}'),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                                    
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(Icons.add),
+                                                Text('${compleateItem.participants}')
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.date_range),
+                                                horizontalSpace(6),
+                                                Text('${compleateItem.date}')
+                                              ],
+                                            ),
+                                                    
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

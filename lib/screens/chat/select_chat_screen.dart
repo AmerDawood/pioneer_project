@@ -120,7 +120,8 @@ class SelectChatScreen extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SvgPicture.asset(Images.logo,height: 40,),
+                                Image.asset('assets/organizations/IMG_8672.PNG',height: 40,),
+                                // SvgPicture.asset(Images.logo,height: 40,),
                                 verticalSpace(15),
                                 Text(
                                   'ساعات',
