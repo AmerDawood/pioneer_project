@@ -1,0 +1,173 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pioneer_project/dummy_data/news.dart';
+import 'package:pioneer_project/helpers/constants.dart';
+
+import '../../../helpers/spacing.dart';
+import '../../../theming/colors.dart';
+import '../../profile/ui/profile_screen.dart';
+import 'news_details_screen.dart';
+
+class NewsScreen extends StatelessWidget {
+  const NewsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: ColorsManager.primary,
+          // leading: Icon(
+          //   Icons.person_2_outlined,
+          //   color: Colors.white,
+          //   size: 30,
+          // ),
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (c){
+                  return ProfileScreen();
+                }));
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                // minRadius: 10,
+                child: SvgPicture.asset(Images.logo,height: 20,),
+              ),
+            ),
+          ),
+          title: SvgPicture.asset(
+            Images.logo,
+            color: Colors.white,
+            height: 35,
+            width: 40,
+          ),
+          centerTitle: true,
+          actions: [
+            Padding(
+              padding: EdgeInsets.all(10),
+              child:
+              Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
+
+
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.arrow_back),
+                    Text('اخر الأخبار',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Icon(
+                      Icons.abc_outlined,
+                      color: Colors.transparent,
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                height: 700.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: news.length,
+                    itemBuilder: (c,index){
+                      final item = news[index];
+                      return InkWell(
+                        onTap: (){
+                          print('tt');
+                          Navigator.push(context,MaterialPageRoute(builder: (c){
+                            return NewsDetailsScreen();
+                          }));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 280,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade400,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Image.asset('${item.image}',fit: BoxFit.cover,),
+                                ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Row(
+                                        children: [
+                                          Text(item.title),
+                                          Spacer(),
+                                          Text(item.organization?.name ?? ''),
+                                        ],
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 20),
+                                      child: Align(
+                                          alignment: AlignmentDirectional.topStart,
+                                          child: Text(item.details)),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Row(
+                                        children: [
+                                          Spacer(),
+                                          Icon(Icons.date_range),
+                                          horizontalSpace(5),
+                                          Text(item.newsDate.toString()),
+                                        ],
+                                      ),
+                                    ),
+
+
+
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              )
+
+
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
