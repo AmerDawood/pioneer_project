@@ -7,6 +7,7 @@ import 'package:pioneer_project/dummy_data/initiatives.dart';
 import 'package:pioneer_project/dummy_data/news.dart';
 import 'package:pioneer_project/dummy_data/organizations.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/perfs/user_preference_controller.dart';
 
 import '../../helpers/spacing.dart';
 import '../../theming/colors.dart';
@@ -76,6 +77,8 @@ class HomeScreen extends StatelessWidget {
                   suffixIcon: Icon(Icons.search),
                 ),
               ),
+              // Text(UserPreferenceController().token),
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

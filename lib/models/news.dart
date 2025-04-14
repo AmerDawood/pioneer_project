@@ -1,22 +1,58 @@
-import 'package:pioneer_project/api/api_settings.dart';
+class Organization {
+  final int id;
+  final String name;
+  final String logo;
+  final String country;
+  final String city;
+  final String type;
+  final String sector;
+  final String size;
+  final String website;
+  final String foundedAt;
 
+  Organization({
+    required this.id,
+    required this.name,
+    required this.logo,
+    required this.country,
+    required this.city,
+    required this.type,
+    required this.sector,
+    required this.size,
+    required this.website,
+    required this.foundedAt,
+  });
+
+  factory Organization.fromJson(Map<String, dynamic> json) {
+    return Organization(
+      id: json['id'],
+      name: json['name'],
+      logo: json['logo'],
+      country: json['country'],
+      city: json['city'],
+      type: json['type'],
+      sector: json['sector'],
+      size: json['size'],
+      website: json['website'],
+      foundedAt: json['founded_at'],
+    );
+  }
+}
 class News {
   final int id;
   final String title;
   final String details;
-  final String? image;
+  final String image;
   final String newsDate;
-  final int organizationId;
-  final Organization? organization;
+  final Organization organization;
 
   News({
     required this.id,
     required this.title,
     required this.details,
-    this.image,
+    required this.image,
     required this.newsDate,
-    required this.organizationId,
-    this.organization,
+    required this.organization,
   });
 
   factory News.fromJson(Map<String, dynamic> json) {
@@ -25,67 +61,8 @@ class News {
       title: json['title'],
       details: json['details'],
       image: json['image'],
-      newsDate:json['news_date'],
-      organizationId: json['organization_id'],
-      organization: json['organization'] != null
-          ? Organization.fromJson(json['organization'])
-          : null,
+      newsDate: json['news_date'],
+      organization: Organization.fromJson(json['organization']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'details': details,
-      'image': image,
-      'news_date': newsDate,
-      'organization_id': organizationId,
-      'organization': organization?.toJson(),
-    };
-  }
-
-  String get fullImageUrl {
-    if (image == null) return '';
-    if (image!.startsWith('http')) return image!;
-    return '/storage/$image';
-  }
-}
-
-class Organization {
-  final int id;
-  final String name;
-  final String? logo;
-  final String? description;
-
-  Organization({
-    required this.id,
-    required this.name,
-    this.logo,
-    this.description,
-  });
-
-  factory Organization.fromJson(Map<String, dynamic> json) {
-    return Organization(
-      id: json['id'],
-      name: json['name'],
-      logo: json['logo'],
-      description: json['description'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'logo': logo,
-      'description': description,
-    };
-  }
-
-  String get fullLogoUrl {
-    if (logo == null) return '';
-    if (logo!.startsWith('http')) return logo!;
-    return '/storage/$logo';
   }
 }
