@@ -281,7 +281,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: Column(
+        body: ListView(
           children: [
             Expanded(
               child: Container(

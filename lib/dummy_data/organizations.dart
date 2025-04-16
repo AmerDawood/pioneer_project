@@ -4,6 +4,7 @@ final List<Organization> organizations = [
   Organization(
     logoPath: 'assets/organizations/IMG_8673.PNG',
     title: "جمعية",
+
   ),
   Organization(logoPath: 'assets/organizations/IMG_8673.PNG', title: "مؤسسة الأمل"),
   Organization(logoPath: 'assets/organizations/IMG_8674.PNG', title: "جمعية التنمية"),

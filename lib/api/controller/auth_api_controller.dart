@@ -6,9 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../../helpers/helpers.dart';
+import '../../models/initiativeOwnerRegisterRequest.dart';
 import '../../models/user.dart';
 import '../../perfs/user_preference_controller.dart';
 import '../api_settings.dart';
+
+import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
+import 'dart:io';
 
 class AuthApiController  with Helpers{
 
@@ -79,7 +84,98 @@ class AuthApiController  with Helpers{
     }
     return false;
   }
+  Future<bool> updateProfile({
+    required String name,
+    required String phone,
+    String? profileImagePath,
+  }) async {
+    final uri = Uri.parse(ApiSettings.UPDATE_PROFILE);
+    final token = await UserPreferenceController().getToken(); // استخدام await هنا لاسترجاع التوكن بشكل غير متزامن
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $token'; // التوكن يجب أن يكون مع 'Bearer' في الهيدر
+    request.headers['Accept'] = 'application/json';
+
+    request.fields['name'] = name;
+    request.fields['phone'] = phone;
+
+    if (profileImagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+        'profile_picture',
+        profileImagePath,
+      ));
+    }
+
+    try {
+      final response = await request.send();
+      final responseBody = await http.Response.fromStream(response);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(responseBody.body);
+        print('تم التحديث بنجاح: ${data['message']}');
+        return true;  // إرجاع true عند نجاح التحديث
+      } else {
+        final errorData = jsonDecode(responseBody.body);
+        print('فشل التحديث: ${errorData['errors']}');
+        return false;  // إرجاع false في حالة الفشل
+      }
+    } catch (e) {
+      print('حدث خطأ أثناء الاتصال بالسيرفر: $e');
+      return false;  // إرجاع false في حال حدوث خطأ في الاتصال
+    }
+  }
+
 }
+
+
+Future<bool> registerInitiativeOwner(InitiativeOwnerRegisterRequest data) async {
+  var uri = Uri.parse(ApiSettings.RegisterInitiativeOwnerScreen);
+
+  var request = http.MultipartRequest('POST', uri);
+
+  request.fields['org_name'] = data.orgName;
+  request.fields['country'] = data.country;
+  request.fields['city'] = data.city;
+  request.fields['type'] = data.type;
+  request.fields['sector'] = data.sector;
+  request.fields['size'] = data.size;
+  request.fields['first_name'] = data.firstName;
+  request.fields['last_name'] = data.lastName;
+  request.fields['job_title'] = data.jobTitle;
+  request.fields['email'] = data.email;
+  request.fields['password'] = data.password;
+  request.fields['password_confirmation'] = data.confirmPassword;
+  request.fields['preferred_language'] = data.preferredLanguage;
+  request.fields['founded_at'] = data.foundedAt;
+  request.fields['website'] = data.website;
+
+  if (data.orgLogoPath != null) {
+    request.files.add(await http.MultipartFile.fromPath(
+      'org_logo',
+      data.orgLogoPath!,
+      contentType: MediaType('image', 'jpeg'), // تأكد من النوع
+    ));
+  }
+
+  var response = await request.send();
+
+  if (response.statusCode == 201) {
+    var body = await response.stream.bytesToString();
+    var jsonResponse = jsonDecode(body);
+    print("تم التسجيل بنجاح: ${jsonResponse['token']}");
+    return true;
+  } else {
+    print('فشل التسجيل: ${response.statusCode}');
+    var body = await response.stream.bytesToString();
+    print(body);
+    return false;
+  }
+}
+
+
+
+
+
 
 
 class AuthResponse {

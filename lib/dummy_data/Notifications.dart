@@ -1,29 +1,38 @@
 
-import 'package:pioneer_project/models/Notifications.dart';
+import '../models/Notifications.dart';
 
 List<NotificationModel> notifications = [
   NotificationModel(
+    id: 1,
     title: 'إشعار جديد',
-    subtitle: 'تمت إضافة فرصة تطوعية جديدة',
-    volunteerHours: '10 ساعات',
-    icon: 'assets/icons/volunteer.svg',
+    message: 'تمت إضافة فرصة تطوعية جديدة',
+    // volunteerHours: 10,
+
+    isRead: false,
+    createdAt: DateTime.now().subtract(Duration(minutes: 15)),
   ),
   NotificationModel(
+    id: 2,
     title: 'تحديث المبادرات',
-    subtitle: 'تم تحديث حالة المبادرة التي انضممت إليها',
-    volunteerHours: '5 ساعات',
-    icon: 'assets/icons/update.svg',
+    message: 'تم تحديث حالة المبادرة التي انضممت إليها',
+    // volunteerHours: 5,
+    isRead: true,
+    createdAt: DateTime.now().subtract(Duration(hours: 2)),
   ),
   NotificationModel(
+    id: 3,
     title: 'تذكير',
-    subtitle: 'لا تنسَ حضور الحدث التطوعي القادم',
-    volunteerHours: '3 ساعات',
-    icon: 'assets/icons/reminder.svg',
+    message: 'لا تنسَ حضور الحدث التطوعي القادم',
+    // volunteerHours: 3,
+    isRead: false,
+    createdAt: DateTime.now().subtract(Duration(days: 1)),
   ),
   NotificationModel(
+    id: 4,
     title: 'شهادة جديدة',
-    subtitle: 'حصلت على شهادة مشاركة في المبادرة',
-    volunteerHours: '20 ساعات',
-    icon: 'assets/icons/certificate.svg',
+    message: 'حصلت على شهادة مشاركة في المبادرة',
+    // volunteerHours: 20,
+    isRead: true,
+    createdAt: DateTime.now().subtract(Duration(days: 3)),
   ),
 ];

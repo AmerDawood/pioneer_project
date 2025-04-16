@@ -1,9 +1,12 @@
+import 'package:pioneer_project/screens/auth/intiative-register/intiative_register_screen.dart';
+
 class ApiSettings {
   static const _API_URL = 'http://10.0.2.2:8000/api/';
 
   //Auth  For User
   static const LOGIN = _API_URL + 'login';
   static const REGISTER = _API_URL + 'register';
+  static const RegisterInitiativeOwnerScreen = _API_URL + 'register/initiative-owner';
 
   
   static const PROFILE = _API_URL + 'profile';

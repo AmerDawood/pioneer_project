@@ -13,6 +13,7 @@ import 'package:pioneer_project/screens/settings/ui/about_app_screen.dart';
 import 'package:pioneer_project/screens/settings/ui/contact_us_screen.dart';
 import 'package:pioneer_project/screens/settings/ui/widgets/setting_listtile_widget.dart';
 import 'package:pioneer_project/theming/colors.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../auth/initiative-login/login_screen.dart';
 import '../../profile/ui/profile_screen.dart';
@@ -168,7 +169,15 @@ class SettingsScreen extends StatelessWidget with Helpers {
               SettingListTileWidget(
                 title: Text('مشاركة'),
                 leadingIcon: Icon(Icons.share),
-                function: (){},
+                function: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (context) => ShareBottomSheet(),
+                  );
+                },
               ),
 
               SettingListTileWidget(
@@ -259,3 +268,33 @@ class SettingsScreen extends StatelessWidget with Helpers {
   }
 }
 
+
+class ShareBottomSheet extends StatelessWidget {
+  const ShareBottomSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      height: 180,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'مشاركة التطبيق',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text('مشاركة الرابط'),
+            onTap: () {
+              Share.share('حمّل تطبيق PIONEERS الآن: https://play.google.com/store/apps/details?id=your.app.id');
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
