@@ -124,53 +124,94 @@ class AuthApiController  with Helpers{
       return false;  // إرجاع false في حال حدوث خطأ في الاتصال
     }
   }
+  Future<bool> loginOwner({required String email, required String password}) async {
+    var url = Uri.parse(ApiSettings.LOGINOWNER);
+    var response = await http.post(url, body: {
+      'email': email,
+      'password': password,
+    });
 
-}
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      print('RESPONSE JSON: $jsonResponse');
 
+      // نسحب بيانات المستخدم
+      var userData = jsonResponse['user'];
+      var token = jsonResponse['token'];
 
-Future<bool> registerInitiativeOwner(InitiativeOwnerRegisterRequest data) async {
-  var uri = Uri.parse(ApiSettings.RegisterInitiativeOwnerScreen);
+      // نضيف التوكن لليوزر قبل ما نبنيه
+      userData['token'] = token;
+      // print(user.token);
+      var data = jsonDecode(response.body);
+      AuthResponse auth = AuthResponse.fromJson(data);
+      // بناء الكائن
+      User user = User.fromJson(userData);
+      await UserPreferenceController().saveUser(user: auth.user, token: auth.token);
 
-  var request = http.MultipartRequest('POST', uri);
+      // بإمكانك تخزينه إذا أردت
+      // await UserPreferenceController().saveUser(user: user);
+      return true;
+    } else if (response.statusCode == 400) {
+      var jsonResponse = jsonDecode(response.body);
+      print('Login failed: ${jsonResponse['message']}');
+    } else {
+      print('Unexpected error: ${response.statusCode}');
+    }
 
-  request.fields['org_name'] = data.orgName;
-  request.fields['country'] = data.country;
-  request.fields['city'] = data.city;
-  request.fields['type'] = data.type;
-  request.fields['sector'] = data.sector;
-  request.fields['size'] = data.size;
-  request.fields['first_name'] = data.firstName;
-  request.fields['last_name'] = data.lastName;
-  request.fields['job_title'] = data.jobTitle;
-  request.fields['email'] = data.email;
-  request.fields['password'] = data.password;
-  request.fields['password_confirmation'] = data.confirmPassword;
-  request.fields['preferred_language'] = data.preferredLanguage;
-  request.fields['founded_at'] = data.foundedAt;
-  request.fields['website'] = data.website;
-
-  if (data.orgLogoPath != null) {
-    request.files.add(await http.MultipartFile.fromPath(
-      'org_logo',
-      data.orgLogoPath!,
-      contentType: MediaType('image', 'jpeg'), // تأكد من النوع
-    ));
-  }
-
-  var response = await request.send();
-
-  if (response.statusCode == 201) {
-    var body = await response.stream.bytesToString();
-    var jsonResponse = jsonDecode(body);
-    print("تم التسجيل بنجاح: ${jsonResponse['token']}");
-    return true;
-  } else {
-    print('فشل التسجيل: ${response.statusCode}');
-    var body = await response.stream.bytesToString();
-    print(body);
     return false;
   }
+
+
+
+  Future<bool> registerInitiativeOwner(InitiativeOwnerRegisterRequest data) async {
+    var uri = Uri.parse(ApiSettings.RegisterInitiativeOwnerScreen);
+
+    var request = http.MultipartRequest('POST', uri);
+
+    request.fields['org_name'] = data.orgName;
+    request.fields['country'] = data.country;
+    request.fields['city'] = data.city;
+    request.fields['type'] = data.type;
+    request.fields['sector'] = data.sector;
+    request.fields['size'] = data.size;
+    request.fields['first_name'] = data.firstName;
+    request.fields['last_name'] = data.lastName;
+    request.fields['job_title'] = data.jobTitle;
+    request.fields['email'] = data.email;
+    request.fields['password'] = data.password;
+    request.fields['password_confirmation'] = data.confirmPassword;
+    request.fields['preferred_language'] = data.preferredLanguage;
+    request.fields['founded_at'] = data.foundedAt;
+    request.fields['website'] = data.website;
+
+    if (data.orgLogoPath != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+        'org_logo',
+        data.orgLogoPath!,
+        contentType: MediaType('image', 'jpeg'), // تأكد من النوع
+      ));
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 201) {
+      var body = await response.stream.bytesToString();
+      var jsonResponse = jsonDecode(body);
+      print("تم التسجيل بنجاح: ${jsonResponse['token']}");
+      return true;
+    } else {
+      print('فشل التسجيل: ${response.statusCode}');
+      var body = await response.stream.bytesToString();
+      print(body);
+      return false;
+    }
+  }
+
+
+
 }
+
+
 
 
 

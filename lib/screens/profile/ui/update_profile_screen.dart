@@ -383,6 +383,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> with TickerPr
       );
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
     } else {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('حدث خطأ أثناء التحديث')),
       );
@@ -409,7 +411,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> with TickerPr
             padding: const EdgeInsets.all(10.0),
             child: InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
+                // Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
               },
               child: CircleAvatar(
                 backgroundColor: Colors.white,
@@ -435,7 +437,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> with TickerPr
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AppScreen())),
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen())),
                         child: Icon(Icons.arrow_back)),
                     Text('الملف الشخصي', style: TextStyle(fontSize: 20)),
                     Icon(Icons.abc_outlined, color: Colors.transparent),

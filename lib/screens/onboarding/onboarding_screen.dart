@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pioneer_project/screens/auth/initiative-login/login_screen.dart';
+import 'package:pioneer_project/screens/auth/login/ui/login_screen.dart';
 import 'package:pioneer_project/screens/onboarding/widgets/button_widget.dart';
+import 'package:pioneer_project/screens/owner/owner_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 // import '../data/models/onboarding_model.dart';
@@ -241,6 +244,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+                                  return LoginScreen();
+                                }));
                               },
                               title: 'تسجيل الدخول',
 
@@ -252,10 +258,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             SizedBox(height: 5.h), // Add spacing between buttons
                             ButtonWidget(
                               onPressed: () {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+                                  return InitiativeOwnerLoginScreen();
+                                }));
                                 _pageController.nextPage(
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeInOut,
                                 );
+
                               },
                               title: 'التسجيل كأصحاب مبادرات',
                               color: ColorsManager.gray.withOpacity(0.7),

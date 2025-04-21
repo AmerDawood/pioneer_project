@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pioneer_project/dummy_data/organizations.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/helpers/spacing.dart';
+import 'package:pioneer_project/screens/categories/category_details.dart';
 
 
 import '../../theming/colors.dart';
@@ -29,7 +30,7 @@ class AllOrganizationsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (c){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                   return ProfileScreen();
                 }));
               },
@@ -70,7 +71,7 @@ class AllOrganizationsScreen extends StatelessWidget {
                   children: [
                     InkWell(
                         onTap:(){
-                          Navigator.push(context, MaterialPageRoute(builder: (c){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                             return AppScreen();
                           }));
                         },
@@ -107,30 +108,37 @@ class AllOrganizationsScreen extends StatelessWidget {
                             final item = organizations[index];
                       return Padding(
                         padding: const EdgeInsets.all(2.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(width: 0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // SvgPicture.asset(Images.logo,height: 40,),
-                               Image.asset('${item.logoPath}',height: 40,),
-                              verticalSpace(15),
-                              Text(
-                                '${item.title}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.50,
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+                              return CategoryDetailsScreen();
+                            }));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(width: 0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // SvgPicture.asset(Images.logo,height: 40,),
+                                 Image.asset('${item.logoPath}',height: 40,),
+                                verticalSpace(15),
+                                Text(
+                                  '${item.title}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.50,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );

@@ -17,6 +17,15 @@ void main() async{
   runApp(MyApp(appRouter: AppRouter()));
 }
 
+
+ /**
+ * make the app work with dummy_date
+ * make joind screen in owner
+ * make add notification to user from owner screen
+ * make some screen is good with API
+  * make intiative participant
+ */
+
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;
 
@@ -37,7 +46,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         // initialRoute: Routes.loginScreen,
         // initialRoute: Routes.appScreen,
-        initialRoute: Routes.appScreen,
+        initialRoute: Routes.splashScreen,
         // initialRoute: Routes.categoriesScreen,
         // initialRoute: Routes.categoryDetailsScreen,
         // initialRoute: Routes.profileScreen,

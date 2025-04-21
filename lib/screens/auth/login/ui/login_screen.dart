@@ -30,62 +30,118 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
   }
   @override
   Widget build(BuildContext context) {
-    return Directionality(
+    return  Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: ColorsManager.primary,
-        body: ListView(
-          children: [
-            Expanded(
-              child: Container(
-                color: ColorsManager.primary,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    verticalSpace(80),
-                    Center(
-                  child:Column(
+        backgroundColor: ColorsManager.primary, // ColorsManager.primary
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 300.h,
+                color: ColorsManager.primary, // ColorsManager.primary
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(Images.logo,color: Colors.white,),
-                       Padding(
-                         padding: const EdgeInsets.all(10.0),
-                         child: Text('PIONEERS',
-                                       style: GoogleFonts.josefinSans(
-                                         color: ColorsManager.white,
-                                         fontWeight: FontWeight.w700,
-                                         fontSize: 32,
-                                       ),
-                                     ),
-                       )
+                      SizedBox(
+                        height: 30,
+                      ),
+                      SvgPicture.asset(
+                        Images.logo,
+                        color: Colors.white,
+                        height: 80.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          'PIONEERS',
+                          style: GoogleFonts.josefinSans(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 32.sp,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                  ],
+              ),
+              Container(
+                height: 700.h,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 60.h),
+                  child: const EmailAndPassword(),
                 ),
               ),
-            ),
-
-            Container(
-              height: 500.h,width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-            child:  Padding(
-              padding: EdgeInsets.only(
-                top: 60.h,
-              ),
-              child: EmailAndPassword(),
-            ),
-            ),
-
-
-          ],
+            ],
+          ),
         ),
       ),
     );
+    // return Directionality(
+    //   textDirection: TextDirection.rtl,
+    //   child: Scaffold(
+    //     backgroundColor: ColorsManager.primary,
+    //     body: Column(
+    //       children: [
+    //         Expanded(
+    //           child: Container(
+    //             color: ColorsManager.primary,
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 verticalSpace(80),
+    //                 Center(
+    //               child:Column(
+    //                 children: [
+    //                   SvgPicture.asset(Images.logo,color: Colors.white,),
+    //                    Padding(
+    //                      padding: const EdgeInsets.all(10.0),
+    //                      child: Text('PIONEERS',
+    //                                    style: GoogleFonts.josefinSans(
+    //                                      color: ColorsManager.white,
+    //                                      fontWeight: FontWeight.w700,
+    //                                      fontSize: 32,
+    //                                    ),
+    //                                  ),
+    //                    )
+    //                 ],
+    //               ),
+    //             ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //
+    //         Container(
+    //           height: 500.h,width: double.infinity,
+    //         decoration: BoxDecoration(
+    //           color: Colors.white,
+    //           borderRadius: BorderRadius.only(
+    //             topLeft: Radius.circular(20),
+    //             topRight: Radius.circular(20),
+    //           ),
+    //         ),
+    //         child:  Padding(
+    //           padding: EdgeInsets.only(
+    //             top: 60.h,
+    //           ),
+    //           child: EmailAndPassword(),
+    //         ),
+    //         ),
+    //
+    //
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

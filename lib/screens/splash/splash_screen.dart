@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/screens/auth/login/ui/login_screen.dart';
+import 'package:pioneer_project/screens/onboarding/onboarding_screen.dart';
 
 import '../../theming/colors.dart';
 
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
       Navigator.push(context,MaterialPageRoute(builder: (c){
-        return LoginScreen();
+        return OnboardingScreen();
       }));
     });
 

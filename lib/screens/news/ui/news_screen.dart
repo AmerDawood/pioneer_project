@@ -185,6 +185,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/api/controller/news_api_controller.dart';  // Ensure correct import
+import 'package:pioneer_project/screens/home/app.dart';
+import 'package:pioneer_project/screens/home/home_screen.dart';
 
 import '../../../helpers/spacing.dart';
 import '../../../models/news.dart';
@@ -217,20 +219,11 @@ class _NewsScreenState extends State<NewsScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorsManager.primary,
-          leading: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return ProfileScreen();
-                }));
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: SvgPicture.asset(Images.logo, height: 20),
-              ),
-            ),
-          ),
+          leading: IconButton(onPressed: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+              return AppScreen();
+            }));
+          }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
           title: SvgPicture.asset(
             Images.logo,
             color: Colors.white,
@@ -239,14 +232,14 @@ class _NewsScreenState extends State<NewsScreen> {
           ),
           centerTitle: true,
           actions: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.all(10),
+            //   child: Icon(
+            //     Icons.menu,
+            //     color: Colors.white,
+            //     size: 30,
+            //   ),
+            // ),
           ],
         ),
         body: FutureBuilder<List<News>>(
@@ -257,7 +250,19 @@ class _NewsScreenState extends State<NewsScreen> {
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error,color: Colors.red,size: 30,),
+                  SizedBox(height: 10,),
+                  Center(child: Text('حدث خطأ ما',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                  ))
+                ],
+              );
             }
 
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -299,7 +304,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         return InkWell(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (_) {
-                              return NewsDetailsScreen();  // Implement details screen for the news
+                              return NewsDetailsScreen(id: item.id.toString(),);  // Implement details screen for the news
                             }));
                           },
                           child: Padding(

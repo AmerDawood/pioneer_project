@@ -51,7 +51,6 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
                       children: [
                         AppTextFormField(
                           controller: _emailEditingController,
-
                           // controller: _loginValidation.emailController,
                           hintText: 'الايميل',
                           prefixIcon: Icon(
@@ -93,6 +92,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
                         ),
                         onPressed: () {
                           performLogin();
+                          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                          //   return AppScreen();
+                          // }));
                           // if (_loginValidation.validateInputs()) {
                         
                           // } else {
@@ -134,7 +136,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
         email: _emailEditingController.text,
         password: _passwordEditingController.text);
     if (status) {
-      Navigator.push(context, MaterialPageRoute(builder: (_){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
         return AppScreen();
       }));
       showSnackBar(context: context, message: 'Logged In Successfully', error: false);

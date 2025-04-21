@@ -281,83 +281,92 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: ListView(
-          children: [
-            Expanded(
-              child: Container(
-                color: ColorsManager.primary,
-                child: Center(
-                  child: SvgPicture.asset(
-                    Images.logo,
-                    color: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Logo and Title Section
+                Container(
+                  color: ColorsManager.primary,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 50), // Add some space on top
+                        SvgPicture.asset(
+                          Images.logo,
+                          color: Colors.white,
+                          height: 100, // Set logo size
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'مرحبا بك في تطبيقنا',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 50),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 600.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  topLeft: Radius.circular(10),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          AppTextFormField(
+
+                // Form Section
+                Container(
+                  width: double.infinity,
+                  height: 600.h, // Adjust the height to suit your design
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        // Name Field
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: AppTextFormField(
                             controller: _nameEditingController,
                             hintText: 'الاسم كامل',
                             prefixIcon: Icon(
                               Icons.person,
                               color: Colors.grey,
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          AppTextFormField(
+                          ),
+                        ),
+                        // Email Field
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: AppTextFormField(
                             controller: _emailEditingController,
                             hintText: 'الايميل',
                             prefixIcon: Icon(
                               Icons.email,
                               color: Colors.grey,
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          AppTextFormField(
+                          ),
+                        ),
+                        // Phone Field
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: AppTextFormField(
                             controller: _phoneEditingController,
                             hintText: 'رقم الهاتف',
                             prefixIcon: Icon(
                               Icons.phone,
                               color: Colors.grey,
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          AppTextFormField(
+                          ),
+                        ),
+                        // Password Field
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: AppTextFormField(
                             controller: _passwordEditingController,
                             hintText: 'كلمة المرور',
                             suffixIcon: Icon(
@@ -368,26 +377,51 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                               Icons.lock,
                               color: Colors.grey,
                             ),
-                          )
-                        ],
-                      ),
-                    ),
-                    verticalSpace(10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AppTextButton(
-                        buttonText: 'تسجيل',
-                        textStyle: TextStyle(
-                          color: Colors.white,
+                          ),
                         ),
-                        onPressed: () => performRegister(),
-                      ),
+                        // Register Button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: AppTextButton(
+                            buttonText: 'تسجيل',
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            // onPressed: () => performRegister(),
+                            onPressed: (){
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                                return LoginScreen();
+                              }));
+                            },
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                                onTap: (){
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                                    return LoginScreen();
+                                  }));
+                                },
+                                child: Text('SignIn',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                  ),
+                                )),
+                            Text(' ?Already have an account'),
+
+                          ],
+                        ),
+
+
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -418,7 +452,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
       context: context,
     );
     if (status) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
         return LoginScreen();
       }));
       showSnackBar(context: context, message: 'تم تسجيل الحساب بنجاح', error: false);

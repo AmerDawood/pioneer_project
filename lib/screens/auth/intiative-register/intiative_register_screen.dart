@@ -126,7 +126,19 @@ class _RegisterInitiativeOwnerScreenState extends State<RegisterInitiativeOwnerS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("تسجيل صاحب مبادرة")),
+      appBar: AppBar(
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+            return InitiativeOwnerLoginScreen();
+          }));
+        }, icon:Icon(Icons.arrow_back)),
+        centerTitle: true,
+        backgroundColor: ColorsManager.primary,
+          title: const Text("تسجيل صاحب مبادرة",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -215,8 +227,8 @@ class _RegisterInitiativeOwnerScreenState extends State<RegisterInitiativeOwnerS
               verticalSpace(20),
               ElevatedButton(
                 onPressed: (){
-                  _submitForm();
-                  Navigator.push(context, MaterialPageRoute(builder: (c){
+                  // _submitForm();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                     return InitiativeOwnerLoginScreen();
                   }));
                 },

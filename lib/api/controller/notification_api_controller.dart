@@ -73,4 +73,40 @@ class NotificationApiController {
   }
 
 
+
+  // admin add notification
+
+
+
+  Future<bool> addNotificatio({
+    required String user_id,
+    required String title,
+    required String message,
+  }) async {
+    var url = Uri.parse(ApiSettings.NOTIFICATIONS_STORE);
+
+    String? token = await UserPreferenceController().getToken();
+
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
+
+    request.fields['user_id'] = user_id;
+    request.fields['title'] = title;
+    request.fields['message'] = message;
+
+
+    var response = await request.send();
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      print('تمت إضافة بنجاح');
+      return true;
+    } else {
+      print('فشل في إضافة : ${response.statusCode}');
+      return false;
+    }
+  }
+
+
+
+
 }

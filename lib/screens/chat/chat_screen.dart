@@ -68,7 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (c){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                 return SelectChatScreen();
               }));
             },

@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/screens/categories/category_screen.dart';
+import 'package:pioneer_project/screens/organizations/all_organizations_screen.dart';
 
 import '../../helpers/spacing.dart';
 import '../../theming/colors.dart';
+import 'initiatives_for_organizations.dart';
 
 class CategoryDetailsScreen extends StatelessWidget {
   const CategoryDetailsScreen({super.key});
@@ -49,8 +52,14 @@ class CategoryDetailsScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.arrow_back),
-                    Text('Test Test'),
+                    InkWell(
+                        onTap:(){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+                            return AllOrganizationsScreen();
+                          }));
+                        },
+                        child: Icon(Icons.arrow_back,color: Colors.blue,)),
+                    Text('المنظمة الأولى'),
                     Icon(
                       Icons.abc_outlined,
                       color: Colors.transparent,
@@ -61,15 +70,19 @@ class CategoryDetailsScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
-                  child: SvgPicture.asset(
-                    Images.logo,
-                    height: 100,
-                    width: 60,
+                  child: Image.asset('assets/organizations/IMG_8673.PNG',
+                      height: 100,
+                      width: 60,
                   ),
+                  // child: SvgPicture.asset(
+                  //   Images.logo,
+                  //   height: 100,
+                  //   width: 60,
+                  // ),
                 ),
               ),
               Text(
-                'Test Test Test ',
+                'المنظمة الأولى',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 24,
@@ -95,7 +108,7 @@ class CategoryDetailsScreen extends StatelessWidget {
                       children: [
                         Text('Section'),
                         verticalSpace(10),
-                        Text('WebsiteWebsiteWebsiteWebsite')
+                        Text('حوت أيضاً على نسخ من نص لوريم إيبسوم')
                       ],
                     ),
                   ],
@@ -156,60 +169,110 @@ class CategoryDetailsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'last of the averstment',
+                      'اخر الاعلانات',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 22,
                       ),
                     ),
-                  )
+                  ),
+
+                  Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                          return IntiativesForOrganizations();
+                        }));
+                      },
+                      child: Text(
+                        'الكل',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
-              ListTile(
-                title: Text(
-                  'Test test',
-                  style: TextStyle(
-                    fontSize: 16,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.black),
                   ),
-                ),
-                subtitle: Text('gaza-palestine'),
-                trailing: Text(
-                  '04 -Apr-2024',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  'Test test',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                subtitle: Text('gaza-palestine'),
-                trailing: Text(
-                  '04 -Apr-2024',
-                  style: TextStyle(
-                    fontSize: 16,
+                  child: ListTile(
+                    title: Text(
+                      'ما هو "لوريم إيبسوم" ؟',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text('gaza-palestine'),
+                    trailing: Text(
+                      '04 -Apr-2024',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
               ),
-              ListTile(
-                title: Text(
-                  'Test test',
-                  style: TextStyle(
-                    fontSize: 16,
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.black),
                   ),
-                ),
-                subtitle: Text('gaza-palestine'),
-                trailing: Text(
-                  '04 -Apr-2024',
-                  style: TextStyle(
-                    fontSize: 16,
+                  child: ListTile(
+                    title: Text(
+                      'ما هو "لوريم إيبسوم" ؟',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text('gaza-palestine'),
+                    trailing: Text(
+                      '04 -Apr-2024',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
                   ),
                 ),
               ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      'ما هو "لوريم إيبسوم" ؟',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text('gaza-palestine'),
+                    trailing: Text(
+                      '04 -Apr-2024',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),

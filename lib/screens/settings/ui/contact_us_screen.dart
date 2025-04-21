@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pioneer_project/api/controller/contact_api_controller.dart';
+import 'package:pioneer_project/screens/home/app.dart';
 import 'package:pioneer_project/theming/colors.dart';
 
 import '../../../helpers/constants.dart';
@@ -32,19 +33,25 @@ class _ContactusScreenState extends State<ContactusScreen> {
       );
 
       try {
+        // Sending the contact message
         await ContactApiController().sendContactMessage(contact);
+
+        // Show success message on successful submission
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('تم إرسال الرسالة بنجاح')),
         );
 
+        // Go back to the previous screen
         Navigator.pop(context);
       } catch (e) {
+        // Handle failure and show an error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('فشل في إرسال الرسالة')),
         );
       }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +60,13 @@ class _ContactusScreenState extends State<ContactusScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorsManager.primary,
-          leading: Icon(Icons.menu, color: Colors.white, size: 30),
+          leading: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (c){
+                  return AppScreen();
+                }));
+              },
+              child: Icon(Icons.arrow_back, color: Colors.white, size: 30)),
           title: SvgPicture.asset(Images.logo, color: Colors.white, height: 35, width: 40),
           centerTitle: true,
           actions: [Padding(padding: EdgeInsets.all(10), child: Icon(Icons.person_2_outlined, color: Colors.white, size: 30))],

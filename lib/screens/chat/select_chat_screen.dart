@@ -29,7 +29,7 @@ class SelectChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (c){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                   return ProfileScreen();
                 }));
               },
@@ -70,7 +70,7 @@ class SelectChatScreen extends StatelessWidget {
                   children: [
                     InkWell(
                         onTap:(){
-                          Navigator.push(context, MaterialPageRoute(builder: (c){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                             return AppScreen();
                           }));
                         },
@@ -107,7 +107,7 @@ class SelectChatScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (c){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                               return ChatScreen();
                             }));
                           },

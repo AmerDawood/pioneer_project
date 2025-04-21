@@ -17,11 +17,19 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../auth/initiative-login/login_screen.dart';
 import '../../profile/ui/profile_screen.dart';
-class SettingsScreen extends StatelessWidget with Helpers {
+class SettingsScreen extends StatefulWidget with Helpers {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> with Helpers {
+  bool isAppEnabled = true;
+  bool isNotificationEnabled = false;
+  @override
   Widget build(BuildContext context) {
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -74,7 +82,7 @@ class SettingsScreen extends StatelessWidget with Helpers {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.arrow_back),
+                    Icon(Icons.arrow_back,color: Colors.transparent,),
                     Text('الإعدادات',
                     style: TextStyle(
                       color: Colors.black,
@@ -97,7 +105,7 @@ class SettingsScreen extends StatelessWidget with Helpers {
                       child: InkWell(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (c){
-                            return LoginScreen();
+                            return RegisterScreen();
                           }));
                         },
                         child: Container(
@@ -117,7 +125,7 @@ class SettingsScreen extends StatelessWidget with Helpers {
                       child: InkWell(
                           onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (c){
-                            return RegisterScreen();
+                            return LoginScreen();
                           }));
                         },
                         child: Container(
@@ -194,7 +202,7 @@ class SettingsScreen extends StatelessWidget with Helpers {
                 title: Text('تسجيل كصاحب مبادرات'),
                 leadingIcon: Icon(Icons.lock),
                 function: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (c){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                             return InitiativeOwnerLoginScreen();
                           }));
                 },
@@ -210,33 +218,32 @@ class SettingsScreen extends StatelessWidget with Helpers {
                 title: Text('حاله التطبيق'),
                 leading: Icon(Icons.format_color_fill_rounded),
                 trailing: Switch(
-                  onChanged: (c){},
-                  value: true,
+                  value: isAppEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      isAppEnabled = value;
+                    });
+                  },
                   activeColor: ColorsManager.primary,
-
-                ),
-              ),
-
-              ListTile(
-                title: Text('اللغه'),
-                leading: Icon(Icons.language),
-                trailing: Switch(
-                  onChanged: (c){},
-                  value: true,
-                  activeColor: ColorsManager.primary,
-
                 ),
               ),
               ListTile(
                 leading: Icon(Icons.notification_add_outlined),
                 title: Text('تفعيل الاشعارات'),
                 trailing: Switch(
-                  onChanged: (c){},
-                  value: false,
-                  activeColor: ColorsManager.primary,
+                  value: isNotificationEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      isNotificationEnabled = value;
 
+                      showSnackBar(context: context, message: 'Success');
+                    });
+                  },
+                  activeColor: ColorsManager.primary,
                 ),
               ),
+
+
               SettingListTileWidget(
                 title: Text('حذف الحساب'),
                 leadingIcon: Icon(Icons.delete_forever),
@@ -253,7 +260,7 @@ class SettingsScreen extends StatelessWidget with Helpers {
                 leadingIcon: Icon(Icons.login_outlined),
                 function: (){
                      showSnackBar(error: false, context: context, message: 'Logout successfuly');
-                  
+
                   Navigator.push(context, MaterialPageRoute(builder: (c){
                             return LoginScreen();
                           }));

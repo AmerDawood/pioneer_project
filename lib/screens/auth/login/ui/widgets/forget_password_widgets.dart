@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:pioneer_project/screens/auth/forget-password/forget_password_screen.dart';
 
 import '../../../../../theming/styles.dart';
 
@@ -12,9 +14,16 @@ class ForgetPasswordWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text(
-            'هل نسيت كلمة المرور ؟',
-            style: TextStyles.font12BlueRegular,
+          InkWell(
+            onTap: (){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+                return ForgetPassword();
+              }));
+            },
+            child: Text(
+              'هل نسيت كلمة المرور ؟',
+              style: TextStyles.font12BlueRegular,
+            ),
           )
         ],
       ),

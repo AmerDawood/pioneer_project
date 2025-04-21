@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/screens/auth/forget-password/reset_password_screen.dart';
 import 'package:pioneer_project/theming/colors.dart';
 import 'package:pioneer_project/widgets/app_text_button.dart';
 import 'package:pioneer_project/widgets/app_text_form_field.dart';
@@ -64,7 +65,11 @@ class ForgetPassword extends StatelessWidget {
                         textStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                            return ResetPasswordScreen();
+                          }));
+                        }),
                   ),
 
             

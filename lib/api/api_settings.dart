@@ -8,12 +8,14 @@ class ApiSettings {
   static const REGISTER = _API_URL + 'register';
   static const RegisterInitiativeOwnerScreen = _API_URL + 'register/initiative-owner';
 
-  
+  static const LOGINOWNER = _API_URL + 'login/owner';
+
   static const PROFILE = _API_URL + 'profile';
   static const UPDATE_PROFILE = _API_URL + 'profile/update';
 
   // INITIATIVES
   static const INITIATIVES = _API_URL + 'initiatives';
+  static const ADDINTEATVE = _API_URL + 'initiatives';
   static const INITIATIVES_BY_ID = _API_URL + 'initiatives/{id}';
   static const INITIATIVES_JOIN = _API_URL + 'initiatives/{id}/join';
   static const INITIATIVES_LEAVE = _API_URL + 'initiatives/{id}/leave';
@@ -25,11 +27,13 @@ class ApiSettings {
   static const HOME = _API_URL + 'home';
   static const HOME_NEWS = _API_URL + 'home/news';
   static const HOME_ORG = _API_URL + 'home/organizations';
+  static const HOME_Initiatives = _API_URL + 'home/initiatives';
 
   // NEWS
 
   static const NEWS = _API_URL + 'news';
   static const NEWS_BY_ID = _API_URL + 'news/{id}';
+  static const ADDNEWS = _API_URL + 'news/';
 
   // ORGANIZATION
     static const ORGANIZATIONS = _API_URL + 'organizations';
@@ -37,7 +41,8 @@ class ApiSettings {
 
   // CONTACT US
 
-  static const CONTACT = _API_URL + 'contact';
+  static const CONTACT = _API_URL + 'contact-messages';
+  static const CONTACT_BY_ID = _API_URL + 'contact-messages/{id}';
 
   // CONTACT FOR ADMINS
   static const CONTACT_FOR_ADMINS = _API_URL + 'contact-messages';
@@ -47,4 +52,5 @@ class ApiSettings {
   static const NOTIFICATIONS_BY_ID = _API_URL + 'notifications/{id}';
   static const NOTIFICATIONS_READ = _API_URL + 'notifications/{id}/read';
   static const NOTIFICATIONS_DESTROY = _API_URL + 'notifications/{id}';
+  static const NOTIFICATIONS_STORE = _API_URL + 'notifications/store';
 }

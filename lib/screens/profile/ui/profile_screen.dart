@@ -239,7 +239,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pioneer_project/perfs/user_preference_controller.dart';
+import 'package:pioneer_project/screens/home/app.dart';
 import 'package:pioneer_project/screens/profile/ui/update_profile_screen.dart';
+import 'package:pioneer_project/theming/colors.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -260,6 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     // Fetch the profile data when the screen is loaded
     fetchProfileData();
+    loadUserData();
+
   }
 
   // Function to fetch profile data from the API
@@ -294,15 +299,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Handle any exceptions
     }
   }
+  void loadUserData() async {
+    final user = await UserPreferenceController().getUser();
+    if (user != null) {
+      setState(() {
+        name = user.name;
+        email = user.email;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+
         appBar: AppBar(
-          backgroundColor: Colors.blue, // Replace with your color
-          title: Text('الملف الشخصي'),
+          leading: IconButton(onPressed: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
+              return AppScreen();
+            }));
+          }, icon: Icon(Icons.arrow_back)),
+          centerTitle: true,
+          backgroundColor: ColorsManager.primary, // Replace with your color
+          title: Text('الملف الشخصي',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -314,13 +339,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 90,
                     width: 90,
                     decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: ColorsManager.primary,
                         borderRadius: BorderRadius.circular(60)),
+
+                    child: Center(
+                      child: Icon(Icons.person,color: Colors.white,),
+                    ),
                   ),
+
                 ),
               ),
               Text(
-                name.isEmpty ? 'Amer ' : name,
+                name.isEmpty ? 'You Name' : name,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 22,
@@ -328,17 +358,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               Text(
-                email.isEmpty ? 'amer@gmail.com' : email,
+                email.isEmpty ? 'youremail@gmail.con' : email,
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
               ),
+
               SizedBox(height: 10),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (c) {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) {
                     return UpdateProfileScreen();
                   }));
                 },
@@ -346,7 +377,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 30,
                   width: 140,
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: ColorsManager.primary,
                       borderRadius: BorderRadius.circular(20)),
                   child: Center(
                     child: Text(

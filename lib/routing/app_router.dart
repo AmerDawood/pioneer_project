@@ -91,18 +91,18 @@ class AppRouter {
           builder: (_) => const ProfileScreen(),
         );
 
-      case Routes.newsDetailsScreen:
-        return MaterialPageRoute(
-          builder: (_) => const NewsDetailsScreen(),
-        );
+      // case Routes.newsDetailsScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const NewsDetailsScreen(),
+      //   );
       case Routes.newsScreen:
         return MaterialPageRoute(
           builder: (_) => const NewsScreen(),
         );
-      case Routes.homeScreen:
-        return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        );
+      // case Routes.homeScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const HomeScreen(),
+      //   );
         case Routes.aboutAppScreen:
         return MaterialPageRoute(
           builder: (_) => const AboutAppScreen(),

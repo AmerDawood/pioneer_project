@@ -16,7 +16,7 @@ class DontHaveAnAccountWidget extends StatelessWidget {
           WidgetSpan(
             child: InkWell(
               onTap: () {
-                Navigator.push(context,MaterialPageRoute(builder: (c){
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (c){
                   return RegisterInitiativeOwnerScreen();
                 }));
                 // قم بتنفيذ الإجراء عند النقر هنا (مثل الانتقال إلى صفحة التسجيل)

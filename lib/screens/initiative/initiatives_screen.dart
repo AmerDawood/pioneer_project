@@ -7,7 +7,9 @@ import 'package:pioneer_project/dummy_data/initiatives.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/screens/initiative/join.dart';
 
+import '../../api/controller/initiatives_api_controller.dart';
 import '../../helpers/spacing.dart';
+import '../../models/Initiative.dart';
 import '../../theming/colors.dart';
 import '../home/app.dart';
 import '../profile/ui/profile_screen.dart';
@@ -52,7 +54,7 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
             padding: const EdgeInsets.all(10.0),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (c){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                   return ProfileScreen();
                 }));
               },
@@ -85,7 +87,6 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
         body: SingleChildScrollView(
           child:Column(
             children: [
-
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -93,13 +94,12 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                   children: [
                     InkWell(
                         onTap:(){
-                          Navigator.push(context, MaterialPageRoute(builder: (c){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                             return AppScreen();
                           }));
                         },
-                        child: Icon(Icons.arrow_back,color: Colors.transparent,)),
+                        child: Icon(Icons.arrow_back,color: ColorsManager.primary,)),
                     Text('المبادرات',
-
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
@@ -150,7 +150,7 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                           child: Align(
                             alignment: Alignment.center,
                             child: Text(
-                              "المبادرات المنجزة",
+                              "المبادرات ",
                               style: TextStyle(
                                 color: _indexTab == 0 ? ColorsManager.white : ColorsManager.primary,
                                 fontSize: 14.sp,
@@ -172,7 +172,7 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                           child: Align(
                             alignment: Alignment.center,
                             child: Text(
-                              "المبادرات الحالية",
+                              "المبادرات المنضم لها",
                               style: TextStyle(
                                 color: _indexTab == 1 ? ColorsManager.white : ColorsManager.primary,
                                 fontSize: 14.sp,
@@ -195,181 +195,126 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                   Column(
                     children: [
 
-                      SizedBox(
-                        height: 500.h,
-                        child: ListView.builder(
-                          itemCount: completedInitiatives.length,
-                          itemBuilder: (context , index){
-                            final compleateItem = completedInitiatives[index];
-                            return   Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (c){
-                                return JoinInitiativeScreen();
-                              }));
-                            },
-                            child: Container(
-                              height: 300.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.grey.shade100,
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 150.h,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.grey.shade400,
-                                    ),
-                                    child: Image.asset('${compleateItem.imageUrl}',fit: BoxFit.cover,),
-                                  ),
-                                                    
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
+                      // Second
+
+
+
+                      FutureBuilder<List<Initiative>>(
+                        future: InitiativesApiController().getAllInitiatives(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const Center(child: Text('لا يوجد مبادرات مكتملة.'));
+                          } else {
+                            // مبادرات مكتملة حسب شرطك، مثلاً اللي انتهى تاريخها
+                            List<Initiative> completedInitiatives = snapshot.data!.toList();
+                                // .where((i) => DateTime.tryParse(i.endDate ?? '')?.isBefore(DateTime.now()) ?? false)
+                                // .toList();
+
+                            return SizedBox(
+                              height: 500.h,
+                              child: ListView.builder(
+                                itemCount: completedInitiatives.length,
+                                itemBuilder: (context, index) {
+                                  final compleateItem = completedInitiatives[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (c) => JoinInitiativeScreen(
+                                              initiative: compleateItem, // Pass the selected initiative data
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 300.h,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.grey.shade100,
+                                        ),
+                                        child: Column(
                                           children: [
-                                            Text('${compleateItem.title}'),
-                                            Spacer(),
-                                            Text('${compleateItem.organization}'),
-                                                    
+                                            Container(
+                                              height: 150.h,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(12),
+                                                color: Colors.grey.shade400,
+                                              ),
+                                              child: compleateItem.image != null
+                                                  ? Image.network(
+                                                compleateItem.image!,
+                                                fit: BoxFit.cover,
+                                              )
+                                                  : const Icon(Icons.image_not_supported),
+                                            ),
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text('${compleateItem.name}'),
+                                                      const Spacer(),
+                                                      Text('${compleateItem.organizationId}'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Text('${compleateItem.details}'),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          const Icon(Icons.group),
+                                                          Text('${compleateItem.maxParticipants}')
+                                                        ],
+                                                      ),
+                                                      const Spacer(),
+                                                      Row(
+                                                        children: [
+                                                          const Icon(Icons.date_range),
+                                                          const SizedBox(width: 6),
+                                                          Text('${compleateItem.endDate}'),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ),
-                                                    
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('${compleateItem.description}'),
-                                      ),
-                                                    
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(Icons.add),
-                                                Text('${compleateItem.participants}')
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.date_range),
-                                                horizontalSpace(6),
-                                                Text('${compleateItem.date}')
-                                              ],
-                                            ),
-                                                    
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          ),
-                        );
-                        
-                          },
-                        ),
+                            );
+                          }
+                        },
                       ),
-                    
+
+                      Column(
+                        children: [
+                        ],
+                      ),
                     ],
                   ),
 
-                  // Second
 
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 500.h,
-                        child: ListView.builder(
-                          itemCount: ongoingInitiatives.length,
-                          itemBuilder: (context , index){
-                            final ongoingItem = completedInitiatives[index];
-                            return   Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 300.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.grey.shade100,
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 150.h,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.grey.shade400,
-                                  ),
-                                   child: Image.asset('${ongoingItem.imageUrl}',fit: BoxFit.cover,),
-                                ),
-                        
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Text('${ongoingItem.title}'),
-                                          Spacer(),
-                                          Text('${ongoingItem.organization}'),
-                        
-                                        ],
-                                      ),
-                                    ),
-                        
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('${ongoingItem.description}'),
-                                    ),
-                        
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.add),
-                                              Text('${ongoingItem.participants}')
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          Row(
-                                            children: [
-                                              Icon(Icons.date_range),
-                                              horizontalSpace(6),
-                                              Text('${ongoingItem.date}')
-                                            ],
-                                          ),
-                        
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                        
-                          },
-                        ),
-                      ),
-                    
-
-                    ],
-                  ),
 
                 ],
               ),

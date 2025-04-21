@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pioneer_project/api/controller/home_api_controller.dart';
 import 'package:pioneer_project/dummy_data/initiatives.dart';
 import 'package:pioneer_project/dummy_data/news.dart';
 import 'package:pioneer_project/dummy_data/organizations.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/perfs/user_preference_controller.dart';
 
+import '../../api/api_settings.dart';
 import '../../helpers/spacing.dart';
+import '../../models/Initiative.dart';
+import '../../models/news.dart';
 import '../../theming/colors.dart';
 import '../../widgets/app_text_form_field.dart';
 import '../initiative/initiatives_screen.dart';
@@ -18,8 +22,34 @@ import '../news/ui/news_screen.dart';
 import '../organizations/all_organizations_screen.dart';
 import '../profile/ui/profile_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+
+
+
+
+
+  HomeScreen({super.key ,});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  late Future<List<News>> news;
+  late Future<List<Organization>> organizations;
+  late Future<List<Initiative>> initiatives;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the Future variables here.
+    news = HomeApiController().getNews();
+    organizations = HomeApiController().getOrganizations();
+    initiatives = HomeApiController().getInitiatives();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +67,7 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (c){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                   return ProfileScreen();
                 }));
               },
@@ -94,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(builder: (c){
+                        Navigator.pushReplacement(context,MaterialPageRoute(builder: (c){
                           return NewsScreen();
                         }));
                       },
@@ -112,115 +142,240 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: 220.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: news.length,
-                  itemBuilder: (context, index) {
-                               final newsItem = news[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (c){
-                            return NewsDetailsScreen();
-                          }));
-                        },
-                        child: Container(
-                        height: 200.h,
-                        width: 170.w,
-                        decoration: BoxDecoration(
-                          // color: Colors.red,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade200),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade100,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 90.h,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                ),
-                              ),
-                              child: Image.asset('${newsItem.image}',fit: BoxFit.cover,),
-                              // child: Padding(
-                              //   padding: const EdgeInsets.all(8.0),
-                              //   child: SvgPicture.asset(Images.logo),
-                              // ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 90.h,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  // color: Colors.amber,
-                                  borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
+                child: FutureBuilder<List<News>>(
+                  future: news, // Use the news variable from initState
+                  builder: (context, snapshot) {
+                    // Handle different states of the Future
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator()); // Show loading spinner while fetching data
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}')); // Show error if something went wrong
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(child: Text('No news available')); // Show message if no data is available
+                    } else {
+                      final news = snapshot.data!; // Get the list of news once it's loaded
+
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: news.length,
+                        itemBuilder: (context, index) {
+                          final newsItem = news[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => NewsDetailsScreen(id: newsItem.id.toString()), // Pass the news ID dynamically
                                   ),
+                                );
+                              },
+                              child: Container(
+                                height: 200.h,
+                                width: 170.w,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.grey.shade200),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade100,
+                                    ),
+                                  ],
                                 ),
                                 child: Column(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${newsItem.title}',
-                                          maxLines: 1,
-                                          style: TextStyle(
-
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 17.sp,
-                                          ),
-                                        )
-                                      ],
+                                    Container(
+                                      height: 90.h,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          topLeft: Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: (newsItem.image != null && newsItem.image!.isNotEmpty)
+                                          ? Image.network(
+                                        '${ApiSettings.PROFILE}/${newsItem.image}', // Build the full URL for the image
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            Icon(Icons.broken_image),
+                                      )
+                                          : Image.asset(
+                                        'assets/news/default_news_image.png',
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'لإظهار جزء من النص فقط',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 15.sp,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: 90.h,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    verticalSpace(4),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '${newsItem.newsDate}',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14.sp,
-                                          ),
-                                        )
-                                      ],
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              newsItem.title,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 17.sp,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Text(
+                                              'لإظهار جزء من النص فقط',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 15.sp,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Text(
+                                              newsItem.newsDate,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                                            ),
-                      ),
-                    );
+                          );
+                        },
+                      );
+                    }
                   },
-                 ),
+                ),
               ),
+
+              // SizedBox(
+              //   height: 220.h,
+              //   child: ListView.builder(
+              //     scrollDirection: Axis.horizontal,
+              //     itemCount: news.length,
+              //     itemBuilder: (context, index) {
+              //                  final newsItem = news[index];
+              //       return Padding(
+              //         padding: const EdgeInsets.all(8.0),
+              //         child: InkWell(
+              //           onTap: (){
+              //             Navigator.pushReplacement(context,MaterialPageRoute(builder: (c){
+              //               return NewsDetailsScreen(id: 1,);
+              //             }));
+              //           },
+              //           child: Container(
+              //           height: 200.h,
+              //           width: 170.w,
+              //           decoration: BoxDecoration(
+              //             // color: Colors.red,
+              //             borderRadius: BorderRadius.circular(10),
+              //             border: Border.all(color: Colors.grey.shade200),
+              //             boxShadow: [
+              //               BoxShadow(
+              //                 color: Colors.grey.shade100,
+              //               ),
+              //             ],
+              //           ),
+              //           child: Column(
+              //             children: [
+              //               Container(
+              //                 height: 90.h,
+              //                 width: double.infinity,
+              //                 decoration: BoxDecoration(
+              //                   color: Colors.grey.shade200,
+              //                   borderRadius: BorderRadius.only(
+              //                     topRight: Radius.circular(10),
+              //                     topLeft: Radius.circular(10),
+              //                   ),
+              //                 ),
+              //                 child: Image.asset('${newsItem.image}',fit: BoxFit.cover,),
+              //                 // child: Padding(
+              //                 //   padding: const EdgeInsets.all(8.0),
+              //                 //   child: SvgPicture.asset(Images.logo),
+              //                 // ),
+              //               ),
+              //               Padding(
+              //                 padding: const EdgeInsets.all(8.0),
+              //                 child: Container(
+              //                   height: 90.h,
+              //                   width: double.infinity,
+              //                   decoration: BoxDecoration(
+              //                     // color: Colors.amber,
+              //                     borderRadius: BorderRadius.only(
+              //                       bottomRight: Radius.circular(10),
+              //                       bottomLeft: Radius.circular(10),
+              //                     ),
+              //                   ),
+              //                   child: Column(
+              //                     children: [
+              //                       Row(
+              //                         children: [
+              //                           Text(
+              //                             '${newsItem.title}',
+              //                             maxLines: 1,
+              //                             style: TextStyle(
+              //
+              //                               color: Colors.black,
+              //                               fontWeight: FontWeight.w600,
+              //                               fontSize: 17.sp,
+              //                             ),
+              //                           )
+              //                         ],
+              //                       ),
+              //                       Row(
+              //                         children: [
+              //                           Text(
+              //                             'لإظهار جزء من النص فقط',
+              //                             style: TextStyle(
+              //                               color: Colors.grey,
+              //                               fontWeight: FontWeight.w400,
+              //                               fontSize: 15.sp,
+              //                             ),
+              //                           )
+              //                         ],
+              //                       ),
+              //                       verticalSpace(4),
+              //                       Row(
+              //                         children: [
+              //                           Text(
+              //                             '${newsItem.newsDate}',
+              //                             style: TextStyle(
+              //                               color: Colors.black,
+              //                               fontWeight: FontWeight.w400,
+              //                               fontSize: 14.sp,
+              //                             ),
+              //                           )
+              //                         ],
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //                               ),
+              //         ),
+              //       );
+              //     },
+              //    ),
+              // ),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -237,7 +392,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (c){
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                           return AllOrganizationsScreen();
                         }));
                       },
@@ -257,49 +412,78 @@ class HomeScreen extends StatelessWidget {
 
               SizedBox(
                 height: 120.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: organizations.length,
-                          itemBuilder: (context, index) {
-                            final orgItem = organizations[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 100.h,
-                        width: 80.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black26),
+                child: FutureBuilder<List<Organization>>(
+                  future: organizations,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('فشل في تحميل المنظمات: ${snapshot.error}'));
+                    } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                      return Center(child: Text('لا توجد منظمات حاليا'));
+                    } else if (snapshot.hasData) {
+                      final organizationsList = snapshot.data!;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: organizationsList.length,
+                        itemBuilder: (context, index) {
+                          final orgItem = organizationsList[index];
 
-                          // color: Colors.grey.shade100,
-                        ),
-                        child: Column(
-                          children: [
-                            verticalSpace(16),
-                            // SvgPicture.asset(
-                            //   Images.logo,
-                            //   height: 30.h,
-                            //   width: 30.w,
-                            // ),
-
-                            Image.asset('${orgItem.logoPath}',height: 30.h,width: 30.w,),
-                            verticalSpace(10),
-                            Text(
-                              '${orgItem.title}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 100.h,
+                              width: 80.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.black26),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                          },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Check if logo is null or empty
+                                  if (orgItem.logo != null && orgItem.logo!.isNotEmpty)
+                                    Image.network(
+                                      orgItem.logo!,
+                                      height: 30.h,
+                                      width: 30.w,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                          Icon(Icons.broken_image),
+                                    )
+                                  else
+                                    Image.asset(
+                                      'assets/organizations/default_logo.png',
+                                      height: 30.h,
+                                      width: 30.w,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    orgItem.name,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return Center(child: Text('لا توجد بيانات'));
+                    }
+                  },
                 ),
               ),
 
+
               verticalSpace(16),
+              // Offer Section
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -365,7 +549,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -380,7 +563,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: (){
-                        Navigator.push(context,MaterialPageRoute(builder:(C){
+                        Navigator.pushReplacement(context,MaterialPageRoute(builder:(C){
                           return InitiativesScreen();
                         }));
                       },
@@ -400,65 +583,105 @@ class HomeScreen extends StatelessWidget {
 
               SizedBox(
                 height: 220.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: ongoingInitiatives.length,
-                          itemBuilder: (context, index) {
-                             final ongoingItem = completedInitiatives[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 200.h,
-                        width: 120.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.black26),
-                        ),
-                        child: Column(
-                          children: [
-                            verticalSpace(20),
-                            Image.asset('${ongoingItem.imageUrl}',height: 40.h,width: 40.h,),
-                            // SvgPicture.asset(Images.logo,height: 40,width: 40,),
-                            verticalSpace(5),
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.sim_card_sharp),
-                                  horizontalSpace(10),
-                                  Text('${ongoingItem.title}')
-                                ],
+                child: FutureBuilder<List<Initiative>>(
+                  future: initiatives, // استخدم المتغير المحلي
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('فشل في تحميل المبادرات'));
+                    } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                      return Center(child: Text('لا توجد مبادرات حاليا'));
+                    } else if (snapshot.hasData) {
+                      final initiativesList = snapshot.data!;
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: initiativesList.length,
+                        itemBuilder: (context, index) {
+                          final ongoingItem = initiativesList[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 200.h,
+                              width: 160.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.black26),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Center(
+                                      child: Image.asset(
+                                        ongoingItem.image.toString(), // تأكد من أن المسار صحيح
+                                        height: 40.h,
+                                        width: 40.h,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.h),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.sim_card_sharp, size: 16.sp),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Text(
+                                            ongoingItem.name,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 13.sp,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.date_range, size: 16.sp),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Text(
+                                            ongoingItem.startDate.toString(),
+                                            style: TextStyle(fontSize: 12.sp),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 6.h),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.place, size: 16.sp),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Text(
+                                            ongoingItem.location,
+                                            style: TextStyle(fontSize: 12.sp),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.date_range),
-                                  horizontalSpace(10),
-                                  Text('${ongoingItem.date}')
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.place),
-                                  horizontalSpace(10),
-                                  Text('غزة')
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      ),
-                    );
-                          },
+                          );
+                        },
+                      );
+                    } else {
+                      return Center(child: Text('لا توجد بيانات'));
+                    }
+                  },
                 ),
               ),
+
               verticalSpace(15),
+
+
             ],
           ),
         ),

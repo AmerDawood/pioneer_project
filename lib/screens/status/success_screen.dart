@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/screens/home/app.dart';
 import '../../../theming/colors.dart';
 
 class SuccessScreen extends StatelessWidget {
@@ -72,7 +73,9 @@ class SuccessScreen extends StatelessWidget {
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (c){
+                      return AppScreen();
+                    }));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
