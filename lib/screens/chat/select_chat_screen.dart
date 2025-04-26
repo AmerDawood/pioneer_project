@@ -63,6 +63,7 @@ class SelectChatScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
+
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -86,6 +87,20 @@ class SelectChatScreen extends StatelessWidget {
                       color: Colors.transparent,
                     ),
                   ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.amber.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.face),
+                    title: Text('هذا القسم غير متوفر الآن'),
+                  ),
                 ),
               ),
 

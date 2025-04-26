@@ -8,40 +8,47 @@ import 'dart:convert';
 
 import '../../models/news.dart';
 
-
 Future<bool> addNews({
   required String title,
   required String details,
   File? image,
 }) async {
-  var url = Uri.parse(ApiSettings.ADDNEWS);
+  try {
+    var url = Uri.parse('https://pioneer-project-2025.shop/api/news');
+    String? token = await UserPreferenceController().getToken();
 
-  String? token = await UserPreferenceController().getToken();
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
 
-  var request = http.MultipartRequest('POST', url);
-  request.headers['Authorization'] = 'Bearer $token';
+    request.fields['title'] = title;
+    request.fields['details'] = details;
 
-  request.fields['title'] = title;
-  request.fields['details'] = details;
+    if (image != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('image', image.path),
+      );
+    }
 
-  if (image != null) {
-    request.files.add(
-      await http.MultipartFile.fromPath('image', image.path),
-    );
-  }
+    var response = await request.send();
 
-  var response = await request.send();
+    // قراءة محتوى الرد كنص
+    final responseBody = await response.stream.bytesToString();
 
-  print(response.statusCode);
-
-  if (response.statusCode == 201 || response.statusCode == 200) {
-    print('تمت إضافة الخبر بنجاح');
-    return true;
-  } else {
-    print('فشل في إضافة الخبر: ${response.statusCode}');
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      print('تمت إضافة الخبر بنجاح');
+      return true;
+    } else {
+      print('فشل في إضافة الخبر: ${response.statusCode}');
+      print('رسالة الخطأ من السيرفر: $responseBody');
+      return false;
+    }
+  } catch (e) {
+    print('حدث خطأ أثناء إضافة الخبر: $e');
     return false;
   }
 }
+
+
 
 Future<List<News>> getAllNews() async {
   // Retrieve the token from shared preferences
@@ -76,7 +83,7 @@ Future<News> getNewsById(String id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('token');  // Make sure you store token during login/registration
 
-  var url = Uri.parse(ApiSettings.NEWS.replaceFirst('{id}', id));
+  var url = Uri.parse(ApiSettings.NEWS_BY_ID.replaceFirst('{id}', id));
   var response = await http.get(
     url,
     headers: {
@@ -97,3 +104,65 @@ Future<News> getNewsById(String id) async {
 }
 
 
+
+Future<bool> deleteNews(String id) async {
+  var url = Uri.parse('${ApiSettings.DEKETEEWS.replaceFirst('{id}', id)}');
+  String? token = await UserPreferenceController().getToken();
+
+  var response = await http.delete(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+    },
+  );
+
+  if (response.statusCode == 200 || response.statusCode == 204) {
+    print('تم حذف الخبر بنجاح');
+    return true;
+  } else {
+    print('فشل في حذف الخبر: ${response.statusCode}');
+    return false;
+  }
+}
+
+Future<bool> updateNews({
+  required int id,
+  required String title,
+  required String details,
+  File? image,
+}) async {
+  try {
+    var url = Uri.parse('https://pioneer-project-2025.shop/api/news/$id');
+    String? token = await UserPreferenceController().getToken();
+
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
+
+    // Laravel يتطلب هذا لتحويل POST إلى PUT
+    request.fields['_method'] = 'PUT';
+
+    request.fields['title'] = title;
+    request.fields['details'] = details;
+
+    if (image != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('image', image.path),
+      );
+    }
+
+    var response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+
+    if (response.statusCode == 200) {
+      print('✅ تم تحديث الخبر بنجاح');
+      return true;
+    } else {
+      print('❌ فشل في تحديث الخبر: ${response.statusCode}');
+      print('رسالة الخطأ من السيرفر: $responseBody');
+      return false;
+    }
+  } catch (e) {
+    print('🔥 حدث خطأ أثناء تحديث الخبر: $e');
+    return false;
+  }
+}

@@ -19,12 +19,15 @@ void main() async{
 
 
  /**
- * make the app work with dummy_date
- * make joind screen in owner
- * make add notification to user from owner screen
- * make some screen is good with API
-  * make intiative participant
- */
+  *
+  *    participants  for user
+  *     Images
+  *     show organizations , details 
+  *     Profile Update and show user data in profile
+  *     register for organizations
+  * ============
+  *
+  */
 
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;

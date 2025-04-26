@@ -16,11 +16,10 @@ class ContactApiController {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Berar $token',
+        'Authorization': 'Bearer $token',
       },
       body: jsonEncode(contact.toJson()),
     );
-
     if (response.statusCode == 201) {
       final responseData = jsonDecode(response.body);
       print('تم إرسال الرسالة: ${responseData['message']}');

@@ -1,53 +1,60 @@
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:pioneer_project/theming/colors.dart';
+
+import '../../../api/controller/initiatives_api_controller.dart';
 import '../../../models/InitiativeParticipant.dart';
+import '../../../theming/colors.dart';
+class InitiativeParticipantsScreen extends StatefulWidget {
+  final String initiativeId;
 
-class ParticipantsScreen extends StatelessWidget {
-  final List<InitiativeParticipant> participants;
+  const InitiativeParticipantsScreen({super.key, required this.initiativeId});
 
-  const ParticipantsScreen({super.key, required this.participants});
+  @override
+  State<InitiativeParticipantsScreen> createState() => _InitiativeParticipantsScreenState();
+}
+
+class _InitiativeParticipantsScreenState extends State<InitiativeParticipantsScreen> {
+  late Future<List<InitiativeParticipant>> _participantsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _participantsFuture = InitiativesApiController().getInitiativeParticipant(widget.initiativeId);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorsManager.primary,
-          title: Text(
-            'قائمة المشاركين',
-            style: GoogleFonts.cairo(color: Colors.white),
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        body: participants.isEmpty
-            ? const Center(child: Text('لا يوجد مشاركين حتى الآن.'))
-            : ListView.separated(
-          padding: const EdgeInsets.all(12),
-          itemCount: participants.length,
-          separatorBuilder: (_, __) => const Divider(),
-          itemBuilder: (context, index) {
-            final participant = participants[index];
-            return ListTile(
-              leading: const Icon(Icons.person, size: 30),
-              title: Text(
-                participant.user.name,
-                style: GoogleFonts.cairo(fontSize: 16),
-              ),
-              // subtitle: Text(
-              //   participant.user. != null
-              //       ? 'العمر: ${participant.age}'
-              //       : 'العمر غير متوفر',
-              //   style: GoogleFonts.cairo(fontSize: 14, color: Colors.grey[600]),
-              // ),
-            );
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('المشاركون في المبادرة'),
+        backgroundColor: ColorsManager.primary,
+      ),
+      body: FutureBuilder<List<InitiativeParticipant>>(
+        future: _participantsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('لا يوجد مشاركين حتى الآن'));
+          }
+
+          final participants = snapshot.data!;
+          return ListView.separated(
+            padding: EdgeInsets.all(16),
+            itemCount: participants.length,
+            separatorBuilder: (_, __) => Divider(),
+            itemBuilder: (context, index) {
+              final p = participants[index];
+              return ListTile(
+                leading: Icon(Icons.person, color: ColorsManager.primary),
+                title: Text(p.user.name),
+                subtitle: Text('البريد: ${p.user.email}'),
+              );
+            },
+          );
+        },
       ),
     );
   }

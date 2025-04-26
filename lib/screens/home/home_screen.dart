@@ -168,7 +168,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => NewsDetailsScreen(id: newsItem.id.toString()), // Pass the news ID dynamically
+                                    builder: (context) => NewsDetailsScreen(
+                                      newsId: newsItem.id,
+                                      title: newsItem.title,
+                                      date: newsItem.newsDate,
+                                      details: newsItem.details,
+                                      // logo: newsItem.image!,
+                                    ), // Pass the news ID dynamically
                                   ),
                                 );
                               },
@@ -198,13 +204,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: (newsItem.image != null && newsItem.image!.isNotEmpty)
                                           ? Image.network(
-                                        '${ApiSettings.PROFILE}/${newsItem.image}', // Build the full URL for the image
+                                        'https://pioneer-project-2025.shop/storage/app/public/${newsItem.image}', // Build the full URL for the image
                                         fit: BoxFit.cover,
                                         errorBuilder: (context, error, stackTrace) =>
                                             Icon(Icons.broken_image),
                                       )
                                           : Image.asset(
-                                        'assets/news/default_news_image.png',
+                                        'assets/news/IMG_8661.jpg',
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -453,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   else
                                     Image.asset(
-                                      'assets/organizations/default_logo.png',
+                                      'assets/organizations/IMG_8672.PNG',
                                       height: 30.h,
                                       width: 30.w,
                                       fit: BoxFit.cover,
@@ -615,7 +621,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     Center(
                                       child: Image.asset(
-                                        ongoingItem.image.toString(), // تأكد من أن المسار صحيح
+                                        'assets/initiative/IMG_8667.PNG', // تأكد من أن المسار صحيح
                                         height: 40.h,
                                         width: 40.h,
                                       ),

@@ -78,33 +78,42 @@ class NotificationApiController {
 
 
 
-  Future<bool> addNotificatio({
-    required String user_id,
+  Future<bool> addNotification({
+    required String userId,
     required String title,
     required String message,
   }) async {
-    var url = Uri.parse(ApiSettings.NOTIFICATIONS_STORE);
+    final url = Uri.parse('https://pioneer-project-2025.shop/api/notifications'); // غيّر الرابط حسب API عندك
+    final token = await UserPreferenceController().getToken();
 
-    String? token = await UserPreferenceController().getToken();
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'user_id': userId,
+          'title': title,
+          'message': message,
+        }),
+      );
 
-    var request = http.MultipartRequest('POST', url);
-    request.headers['Authorization'] = 'Bearer $token';
-
-    request.fields['user_id'] = user_id;
-    request.fields['title'] = title;
-    request.fields['message'] = message;
-
-
-    var response = await request.send();
-
-    if (response.statusCode == 201 || response.statusCode == 200) {
-      print('تمت إضافة بنجاح');
-      return true;
-    } else {
-      print('فشل في إضافة : ${response.statusCode}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        print("✅ Notification created: ${data['notification']}");
+        return true;
+      } else {
+        print("❌ Failed to create notification: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("🔥 Error: $e");
       return false;
     }
   }
+
 
 
 

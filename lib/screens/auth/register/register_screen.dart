@@ -387,29 +387,31 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                             textStyle: TextStyle(
                               color: Colors.white,
                             ),
-                            // onPressed: () => performRegister(),
-                            onPressed: (){
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
-                                return LoginScreen();
-                              }));
-                            },
+                            onPressed: () => performRegister(),
+                            // onPressed: (){
+                            //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                            //     return LoginScreen();
+                            //   }));
+                            // },
                           ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Text(' لديك حساب بالفعل ؟'),
                             InkWell(
-                                onTap: (){
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
-                                    return LoginScreen();
-                                  }));
-                                },
-                                child: Text('SignIn',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                  ),
-                                )),
-                            Text(' ?Already have an account'),
+                              onTap: (){
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+                                  return LoginScreen();
+                                }));
+                              },
+                              child: Text(' تسجيل الدخول ',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            )
+
 
                           ],
                         ),

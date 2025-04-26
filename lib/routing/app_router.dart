@@ -81,10 +81,6 @@ class AppRouter {
           builder: (_) => const CategoriesScreen(),
         );
 
-      case Routes.categoryDetailsScreen:
-        return MaterialPageRoute(
-          builder: (_) => const CategoryDetailsScreen(),
-        );
 
       case Routes.profileScreen:
         return MaterialPageRoute(

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pioneer_project/helpers/constants.dart';
 import 'package:pioneer_project/helpers/helpers.dart';
 import 'package:pioneer_project/helpers/spacing.dart';
+import 'package:pioneer_project/perfs/user_preference_controller.dart';
 import 'package:pioneer_project/screens/auth/login/ui/login_screen.dart';
 import 'package:pioneer_project/screens/auth/register/register_screen.dart';
 import 'package:pioneer_project/screens/settings/ui/about_app_screen.dart';
@@ -98,54 +99,68 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (c){
-                            return RegisterScreen();
-                          }));
-                        },
-                        child: Container(
-                          height: 55.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: ColorsManager.primary)
-                          ),
-                          child: Center(child: Text('انشاء حساب')),
-                        ),
-                      ),
-                    ),
-                    horizontalSpace(10),
-
-                    Expanded(
-                      flex: 1,
-                      child: InkWell(
-                          onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (c){
-                            return LoginScreen();
-                          }));
-                        },
-                        child: Container(
-                          height: 55.h,
-                          decoration: BoxDecoration(
-                            color: ColorsManager.secondary,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: ColorsManager.primary)
-                          ),
-                          child: Center(child: Text('تسجيل دخول',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                          )),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.face),
+                    title: Text('مرحباً بك مرة أخرى'),
+                    subtitle: Text('تم تسجيل الدخول بنجاح'),
+                  ),
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         flex: 1,
+              //         child: InkWell(
+              //           onTap: (){
+              //             Navigator.push(context, MaterialPageRoute(builder: (c){
+              //               return RegisterScreen();
+              //             }));
+              //           },
+              //           child: Container(
+              //             height: 55.h,
+              //             decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(10),
+              //               border: Border.all(color: ColorsManager.primary)
+              //             ),
+              //             child: Center(child: Text('انشاء حساب')),
+              //           ),
+              //         ),
+              //       ),
+              //       horizontalSpace(10),
+              //
+              //       Expanded(
+              //         flex: 1,
+              //         child: InkWell(
+              //             onTap: (){
+              //             Navigator.push(context, MaterialPageRoute(builder: (c){
+              //               return LoginScreen();
+              //             }));
+              //           },
+              //           child: Container(
+              //             height: 55.h,
+              //             decoration: BoxDecoration(
+              //               color: ColorsManager.secondary,
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 border: Border.all(color: ColorsManager.primary)
+              //             ),
+              //             child: Center(child: Text('تسجيل دخول',
+              //             style: TextStyle(
+              //               color: Colors.white,
+              //             ),
+              //             )),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
               SettingListTileWidget(
                 title: Text('الملف الشخصي'),
@@ -202,6 +217,9 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
                 title: Text('تسجيل كصاحب مبادرات'),
                 leadingIcon: Icon(Icons.lock),
                 function: (){
+                  UserPreferenceController().clear();
+                  showSnackBar(context: context, message: 'الانتقال لتسجيل الدخول كصاحب مبادرة');
+                  print('user deleted successfuly');
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
                             return InitiativeOwnerLoginScreen();
                           }));
@@ -248,6 +266,8 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
                 title: Text('حذف الحساب'),
                 leadingIcon: Icon(Icons.delete_forever),
                 function: (){
+                  UserPreferenceController().clear();
+                  print('user deleted successfuly');
                   showSnackBar(context: context,error: false, message: 'Account deleted successfuly');
                   Navigator.push(context, MaterialPageRoute(builder: (c){
                             return LoginScreen();
@@ -259,8 +279,9 @@ class _SettingsScreenState extends State<SettingsScreen> with Helpers {
                 title: Text('تسجيل الخروج'),
                 leadingIcon: Icon(Icons.login_outlined),
                 function: (){
-                     showSnackBar(error: false, context: context, message: 'Logout successfuly');
-
+                  UserPreferenceController().clear();
+                  print('user deleted successfuly');
+                     showSnackBar(error: false, context: context, message: 'تم تسجيل الخروج بنجاح للمستخدم');
                   Navigator.push(context, MaterialPageRoute(builder: (c){
                             return LoginScreen();
                           }));

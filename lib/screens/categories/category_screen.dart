@@ -10,9 +10,14 @@ import '../../helpers/spacing.dart';
 import '../../theming/colors.dart';
 import '../../widgets/app_text_form_field.dart';
 
-class CategoriesScreen extends StatelessWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
 
+  @override
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -48,7 +53,7 @@ class CategoriesScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Row( 
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Icon(Icons.arrow_back),
@@ -79,7 +84,7 @@ class CategoriesScreen extends StatelessWidget {
                      padding: const EdgeInsets.all(18.0),
                      child: Text('test test',
                      style: TextStyle(
-                      color: Colors.black, 
+                      color: Colors.black,
                       fontSize: 18.sp,
                      ),
                      ),

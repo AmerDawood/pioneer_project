@@ -496,7 +496,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> with TickerPr
                       ),
                       _buildInputField('الاسم كامل', nameController),
                       _buildInputField('رقم الهاتف', phoneController),
-                      _buildInputField('الايميل', emailController, enabled: false),
+                      // _buildInputField('الايميل', emailController, enabled: false),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AppTextButton(

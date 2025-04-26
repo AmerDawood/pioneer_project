@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pioneer_project/helpers/helpers.dart';
 import 'package:pioneer_project/screens/status/success_screen.dart';
 import '../../../theming/colors.dart';
 import '../../../helpers/spacing.dart';
@@ -7,7 +8,7 @@ import '../../api/controller/initiatives_api_controller.dart';
 import '../../models/Initiative.dart';
 import '../home/app.dart';
 
-class JoinInitiativeScreen extends StatelessWidget {
+class JoinInitiativeScreen extends StatelessWidget with Helpers {
   final Initiative initiative; // Accept the real data
 
   const JoinInitiativeScreen({super.key, required this.initiative});
@@ -87,33 +88,35 @@ class JoinInitiativeScreen extends StatelessWidget {
                     backgroundColor: ColorsManager.primary,
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
+                    // تأكيد أن الـ ID موجود
+                    if (initiative.id != null) {
                       bool joined = await InitiativesApiController().joinInitiative(initiative.id);
 
                       if (joined) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("تم التقديم للمبادرة بنجاح!")),
-                        );
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (c) => SuccessScreen()),
-                        );
+                        if (context.mounted) {
+                           showSnackBar(context: context, message: "تم التقديم للمبادرة بنجاح!");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (c) => SuccessScreen()),
+                          );
+                        }
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("فشل في التقديم للمبادرة. حاول مرة أخرى.")),
-                        );
+                        if (context.mounted) {
+                          showSnackBar(context: context, message: "لقد تقدمت بطلب سابقًا أو حدث خطأ.");
+                        }
                       }
-
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (c){
-                    //   return SuccessScreen();
-                    // }));
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //     SnackBar(content: Text("تم التقديم للمبادرة بنجاح!"))
-                    // );
+                    } else {
+                      showSnackBar(context: context, message: "المبادرة غير صالحة");
+                    }
                   },
-                  child: Text("تقديم الطلب", style: TextStyle(fontSize: 18.sp, color: Colors.white)),
+                  child: Text(
+                    "تقديم الطلب",
+                    style: TextStyle(fontSize: 18.sp, color: Colors.white),
+                  ),
                 ),
-              ),
+              )
+
             ],
           ),
         ),

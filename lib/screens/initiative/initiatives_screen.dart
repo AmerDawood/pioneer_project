@@ -254,7 +254,7 @@ class _InitiativesScreenState extends State<InitiativesScreen> with TickerProvid
                                                 compleateItem.image!,
                                                 fit: BoxFit.cover,
                                               )
-                                                  : const Icon(Icons.image_not_supported),
+                                                  :  Image.asset('assets/initiative/IMG_8667.PNG',width: double.infinity,  fit: BoxFit.cover,),
                                             ),
                                             Column(
                                               children: [

@@ -8,6 +8,7 @@ class UserPreferenceController {
     await prefs.setInt('user_id', user.id);
     await prefs.setString('user_name', user.name);
     await prefs.setString('user_email', user.email);
+    await prefs.setString('role', user.role);
     await prefs.setString('token', token);
   }
 
@@ -23,11 +24,17 @@ class UserPreferenceController {
     final id = prefs.getInt('user_id');
     final name = prefs.getString('user_name');
     final email = prefs.getString('user_email');
+    final role = prefs.getString('role'); // 👈
 
-    if (id != null && name != null && email != null) {
-      return User(id: id, name: name, email: email);
+    if (id != null && name != null && email != null && role != null) {
+      return User(id: id, name: name, email: email, role: role); // 👈
     }
     return null;
+  }
+
+  Future<String?> getUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role');
   }
 
   Future<void> clear() async {

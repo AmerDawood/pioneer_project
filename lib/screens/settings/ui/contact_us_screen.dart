@@ -42,7 +42,9 @@ class _ContactusScreenState extends State<ContactusScreen> {
         );
 
         // Go back to the previous screen
-        Navigator.pop(context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
+          return AppScreen();
+        }));
       } catch (e) {
         // Handle failure and show an error message
         ScaffoldMessenger.of(context).showSnackBar(

@@ -304,7 +304,13 @@ class _NewsScreenState extends State<NewsScreen> {
                         return InkWell(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (_) {
-                              return NewsDetailsScreen(id: item.id.toString(),);  // Implement details screen for the news
+                              return NewsDetailsScreen(
+                              newsId: item.id,
+                              title: item.title,
+                              date: item.newsDate,
+                              details: item.details,
+                                // logo: item.image!,
+                              );  // Implement details screen for the news
                             }));
                           },
                           child: Padding(
@@ -324,7 +330,19 @@ class _NewsScreenState extends State<NewsScreen> {
                                       color: Colors.grey.shade400,
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: Image.asset('${item.image}', fit: BoxFit.cover, width: double.infinity),
+                                    child: (item.image != null && item.image!.isNotEmpty)
+                                        ? Image.network(
+                                      'https://pioneer-project-2025.shop/storage/app/public/${item.image}', // Build the full URL for the image
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                          Icon(Icons.broken_image),
+                                    )
+                                        : Image.asset(
+                                      'assets/news/IMG_8661.jpg',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                                   ),
                                   Column(
                                     children: [

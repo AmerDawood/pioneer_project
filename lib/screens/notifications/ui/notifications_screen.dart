@@ -210,6 +210,18 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             SizedBox(height: 16),
 
+
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.amber.shade100,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                leading: Icon(Icons.warning),
+                title: Text('اضغط ضغطة طويلة لإظهار المزيد من الخيارات'),
+              ),
+            ),
+
             // الإشعارات
             Expanded(
               child: FutureBuilder<List<NotificationModel>>(
@@ -240,7 +252,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 child: SvgPicture.asset(Images.logo),
                               ),
                               title: Text(item.title),
-                              subtitle: Text(item.title),
+                              subtitle: Text(item.message),
                               trailing: item.isRead ? Icon(Icons.check,color: Colors.green,) : Icon(Icons.cancel,color: Colors.red,),
                             ),
                             Divider(indent: 10.w, endIndent: 10.w),

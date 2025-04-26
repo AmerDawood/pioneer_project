@@ -1,14 +1,14 @@
 import 'package:pioneer_project/screens/auth/intiative-register/intiative_register_screen.dart';
 
 class ApiSettings {
-  static const _API_URL = 'http://10.0.2.2:8000/api/';
+  static const _API_URL = 'https://pioneer-project-2025.shop/api/';
 
   //Auth  For User
   static const LOGIN = _API_URL + 'login';
   static const REGISTER = _API_URL + 'register';
-  static const RegisterInitiativeOwnerScreen = _API_URL + 'register/initiative-owner';
 
-  static const LOGINOWNER = _API_URL + 'login/owner';
+  static const RegisterInitiativeOwnerScreen = _API_URL + 'register/initiative-owner';
+  static const LOGINOWNER = _API_URL + 'login';
 
   static const PROFILE = _API_URL + 'profile';
   static const UPDATE_PROFILE = _API_URL + 'profile/update';
@@ -18,6 +18,10 @@ class ApiSettings {
   static const ADDINTEATVE = _API_URL + 'initiatives';
   static const INITIATIVES_BY_ID = _API_URL + 'initiatives/{id}';
   static const INITIATIVES_JOIN = _API_URL + 'initiatives/{id}/join';
+  static const DELETEinitiatives = _API_URL + 'initiatives/{id}';
+  static const Updateinitiatives = _API_URL + 'initiatives/{id}';
+
+
   static const INITIATIVES_LEAVE = _API_URL + 'initiatives/{id}/leave';
   static const INITIATIVES_participants =
       _API_URL + 'initiatives/{id}/participants';
@@ -34,6 +38,7 @@ class ApiSettings {
   static const NEWS = _API_URL + 'news';
   static const NEWS_BY_ID = _API_URL + 'news/{id}';
   static const ADDNEWS = _API_URL + 'news/';
+  static const DEKETEEWS = _API_URL + 'news/{id}';
 
   // ORGANIZATION
     static const ORGANIZATIONS = _API_URL + 'organizations';

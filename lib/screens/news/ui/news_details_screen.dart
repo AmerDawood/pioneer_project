@@ -12,20 +12,22 @@ import '../../home/app.dart';
 import '../../profile/ui/profile_screen.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  final String id;
-  NewsDetailsScreen({super.key, required this.id});
+  final int newsId;
+  final String title;
+  final String details;
+  // final String logo;
+  final String date;
+  NewsDetailsScreen({super.key, required this.newsId,required this.details, required this.title,required this.date,});
 
   @override
   State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
-  late Future<News> _future;
 
   @override
   void initState() {
     super.initState();
-    _future = getNewsById(widget.id.toString());
   }
 
   @override
@@ -70,118 +72,121 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
             ),
           ],
         ),
+
         body: SingleChildScrollView(
-          child: FutureBuilder<News>(
-            future: _future,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Text('Loading...'),
-                );
-              } else if (snapshot.hasData) {
-                var news = snapshot.data!;
-                return Column(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (c) {
-                                  return AppScreen();
-                                }),
-                              );
-                            },
-                            child: Icon(Icons.arrow_back),
-                          ),
-                          Text(
-                            'عنوان الخبر',
-                            style: TextStyle(color: Colors.black, fontSize: 20),
-                          ),
-                          Icon(
-                            Icons.abc_outlined,
-                            color: Colors.transparent,
-                          ),
-                        ],
-                      ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (c) {
+                            return AppScreen();
+                          }),
+                        );
+                      },
+                      child: Icon(Icons.arrow_back),
                     ),
-                    ListTile(
-                      leading: Text(
-                        'العنوان / ',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      title: Text(news.title),
-                    ),
-                    ListTile(
-                      leading: Text(
-                        'المؤسسة / ',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      title: Text(news.organization.name),
-                    ),
-                    ListTile(
-                      leading: Text(
-                        'تاريخ الانتهاء / ',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      title: Text(news.newsDate),
-                    ),
-                    ListTile(
-                      leading: Text(
-                        'عدد المتطوعين / ',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                      title: Text('١٠٠'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'الوصف',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        news.details,
-                        maxLines: 10,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w200,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return Column(
-                  children: [
-                    Icon(
-                      Icons.warning,
-                      size: 80,
-                    ),
-                    SizedBox(height: 20),
                     Text(
-                      'No Data ${snapshot.error}',
-                      style: TextStyle(fontSize: 30, color: Colors.grey),
+                      '${widget.title}',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                    Icon(
+                      Icons.abc_outlined,
+                      color: Colors.transparent,
                     ),
                   ],
-                );
-              }
-            },
+                ),
+              ),
+
+
+              Icon(Icons.broken_image,size: 100,),
+
+
+              // widget.logo.isNotEmpty
+              //     ?
+              // Icon(
+              //   Icons.image_not_supported,
+              //   size: 100,
+              //   color: Colors.grey,
+              // )
+              // // Image.network(
+              // //   'https://pioneer-project-2025.shop/storage/app/public/${widget.logo}',
+              // //   height: 200,
+              // //   width: double.infinity,
+              // //   fit: BoxFit.cover,
+              // //   errorBuilder: (context, error, stackTrace) => Icon(
+              // //     Icons.broken_image,
+              // //     size: 100,
+              // //   ),
+              // // )
+              //     : Icon(
+              //   Icons.image_not_supported,
+              //   size: 100,
+              //   color: Colors.grey,
+              // ),
+
+              ListTile(
+                leading: Text(
+                  'العنوان / ',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                title: Text('${widget.title}'),
+              ),
+              ListTile(
+                leading: Text(
+                  'المؤسسة / ',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                title: Text('Organization'),
+              ),
+              ListTile(
+                leading: Text(
+                  'تاريخ الانتهاء / ',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                title: Text('${widget.date}'),
+              ),
+              ListTile(
+                leading: Text(
+                  'عدد المتطوعين / ',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                title: Text('١٠٠'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'الوصف',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '${widget.details}',
+                  maxLines: 10,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

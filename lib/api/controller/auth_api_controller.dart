@@ -3,7 +3,10 @@ import 'dart:convert';
 
 // import 'package:advertisement/prefs/user_preference_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pioneer_project/screens/home/app.dart';
+import 'package:pioneer_project/screens/owner/owner_screen.dart';
 
 import '../../helpers/helpers.dart';
 import '../../models/initiativeOwnerRegisterRequest.dart';
@@ -17,7 +20,10 @@ import 'dart:io';
 
 class AuthApiController  with Helpers{
 
-  Future<bool> login({required String email, required String password}) async {
+  Future<bool> login({
+    required String email,
+    required String password,
+  }) async {
     var url = Uri.parse(ApiSettings.LOGIN);
     var response = await http.post(url, body: {
       'email': email,
@@ -28,34 +34,23 @@ class AuthApiController  with Helpers{
       var jsonResponse = jsonDecode(response.body);
       print('RESPONSE JSON: $jsonResponse');
 
-      // نسحب بيانات المستخدم
-      var userData = jsonResponse['user'];
       var token = jsonResponse['token'];
+      var userData = jsonResponse['user'];
 
-      // نضيف التوكن لليوزر قبل ما نبنيه
-      userData['token'] = token;
-      // print(user.token);
-      var data = jsonDecode(response.body);
-      AuthResponse auth = AuthResponse.fromJson(data);
-      // بناء الكائن
-      User user = User.fromJson(userData);
-      await UserPreferenceController().saveUser(user: auth.user, token: auth.token);
-
-
-
-      // بإمكانك تخزينه إذا أردت
-      // await UserPreferenceController().saveUser(user: user);
-
+      if (userData != null) {
+        await UserPreferenceController().saveUser(
+          user: AuthResponse.fromJson(jsonResponse).user,
+          token: token,
+        );
+      }
       return true;
-    } else if (response.statusCode == 400) {
+    } else {
       var jsonResponse = jsonDecode(response.body);
       print('Login failed: ${jsonResponse['message']}');
-    } else {
-      print('Unexpected error: ${response.statusCode}');
+      return false;
     }
-
-    return false;
   }
+
 
   Future<bool> register({
     required String name,
@@ -84,6 +79,34 @@ class AuthApiController  with Helpers{
     }
     return false;
   }
+
+
+  Future<Map<String, dynamic>?> fetchUserProfile() async {
+    final token = await UserPreferenceController().getToken();
+    const String url = 'https://pioneer-project-2025.shop/api/profile';
+    try {
+      final response = await http.get(Uri.parse(url), headers: {
+        'Accept': 'application/json',
+        'Authorization' : 'Bearer $token'
+      });
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data;
+      } else {
+        print('Failed to load profile: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+      return null;
+    }
+  }
+
+
+
+
+
   Future<bool> updateProfile({
     required String name,
     required String phone,
@@ -124,42 +147,44 @@ class AuthApiController  with Helpers{
       return false;  // إرجاع false في حال حدوث خطأ في الاتصال
     }
   }
-  Future<bool> loginOwner({required String email, required String password}) async {
-    var url = Uri.parse(ApiSettings.LOGINOWNER);
-    var response = await http.post(url, body: {
-      'email': email,
-      'password': password,
-    });
 
-    if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      print('RESPONSE JSON: $jsonResponse');
 
-      // نسحب بيانات المستخدم
-      var userData = jsonResponse['user'];
-      var token = jsonResponse['token'];
-
-      // نضيف التوكن لليوزر قبل ما نبنيه
-      userData['token'] = token;
-      // print(user.token);
-      var data = jsonDecode(response.body);
-      AuthResponse auth = AuthResponse.fromJson(data);
-      // بناء الكائن
-      User user = User.fromJson(userData);
-      await UserPreferenceController().saveUser(user: auth.user, token: auth.token);
-
-      // بإمكانك تخزينه إذا أردت
-      // await UserPreferenceController().saveUser(user: user);
-      return true;
-    } else if (response.statusCode == 400) {
-      var jsonResponse = jsonDecode(response.body);
-      print('Login failed: ${jsonResponse['message']}');
-    } else {
-      print('Unexpected error: ${response.statusCode}');
-    }
-
-    return false;
-  }
+  // Future<bool> loginOwner({required String email, required String password}) async {
+  //   var url = Uri.parse(ApiSettings.LOGINOWNER);
+  //   var response = await http.post(url, body: {
+  //     'email': email,
+  //     'password': password,
+  //   });
+  //
+  //   if (response.statusCode == 200) {
+  //     var jsonResponse = jsonDecode(response.body);
+  //     print('RESPONSE JSON: $jsonResponse');
+  //
+  //     // نسحب بيانات المستخدم
+  //     var userData = jsonResponse['user'];
+  //     var token = jsonResponse['token'];
+  //
+  //     // نضيف التوكن لليوزر قبل ما نبنيه
+  //     userData['token'] = token;
+  //     // print(user.token);
+  //     var data = jsonDecode(response.body);
+  //     AuthResponse auth = AuthResponse.fromJson(data);
+  //     // بناء الكائن
+  //     User user = User.fromJson(userData);
+  //     await UserPreferenceController().saveUser(user: auth.user, token: auth.token);
+  //
+  //     // بإمكانك تخزينه إذا أردت
+  //     // await UserPreferenceController().saveUser(user: user);
+  //     return true;
+  //   } else if (response.statusCode == 400) {
+  //     var jsonResponse = jsonDecode(response.body);
+  //     print('Login failed: ${jsonResponse['message']}');
+  //   } else {
+  //     print('Unexpected error: ${response.statusCode}');
+  //   }
+  //
+  //   return false;
+  // }
 
 
 

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:pioneer_project/api/controller/news_api_controller.dart';
 import 'package:pioneer_project/helpers/constants.dart';
+import 'package:pioneer_project/helpers/helpers.dart';
 import 'package:pioneer_project/perfs/user_preference_controller.dart';
 import 'package:pioneer_project/screens/auth/initiative-login/login_screen.dart';
 import 'package:pioneer_project/screens/news/ui/add_news_screen.dart';
+import 'package:pioneer_project/screens/notifications/ui/notifications_screen.dart';
 import 'package:pioneer_project/screens/owner/participants.dart';
+import 'package:pioneer_project/screens/owner/participants/participants_screen.dart';
 import 'package:pioneer_project/screens/owner/requests/all_requests_screen.dart';
 import '../../../theming/colors.dart';
 import '../../api/api_settings.dart';
@@ -17,8 +22,11 @@ import '../../models/Initiative.dart';
 import '../../models/news.dart';
 import '../../models/user.dart';
 import '../initiative/add_intiative_screen.dart';
+import '../initiative/update_screen.dart';
 import '../initiative/users_joined.dart';
 import '../news/ui/news_details_screen.dart';
+import '../news/ui/update_news.dart';
+import 'add_notification_screen/add_notification.dart';
 
 
 class OwnerDashboardScreen extends StatefulWidget {
@@ -28,7 +36,7 @@ class OwnerDashboardScreen extends StatefulWidget {
   State<OwnerDashboardScreen> createState() => _OwnerDashboardScreenState();
 }
 
-class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
+class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> with Helpers {
   late Future<List<News>> news;
   late Future<List<Organization>> organizations;
   late Future<List<Initiative>> initiatives;
@@ -43,152 +51,202 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Icon(Icons.person),
-          backgroundColor: ColorsManager.primary,
-          title: Text(
-            'لوحة تحكم المالك',
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: InkWell(
-                  onTap: (){
-                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (c){
-                      return InitiativeOwnerLoginScreen();
-                    }));
-                  },
-                  child: Icon(Icons.logout,color: Colors.red,))
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InkWell(
+                onTap: (){
+                  showSnackBar(context: context, message:'تم تسجيل الخروج بنجاح للمالك');
+                  UserPreferenceController().clear();
+                  Navigator.pushReplacement(context,MaterialPageRoute(builder: (c){
+                    return InitiativeOwnerLoginScreen();
+                  }));
+                },
+                child: Icon(Icons.logout,color: Colors.red,))
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FutureBuilder<User?>(
-                  future: UserPreferenceController().getUser(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasData && snapshot.data != null) {
-                      return Text('مرحبًا Your name',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
+        backgroundColor: ColorsManager.primary,
+        title: Text(
+          'لوحة تحكم المالك',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(Icons.person,color: Colors.white,),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              // FutureBuilder<String?>(
+              //   future: UserPreferenceController().getToken(),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.connectionState == ConnectionState.waiting) {
+              //       return CircularProgressIndicator(); // أو أي لودينج
+              //     } else if (snapshot.hasError) {
+              //       return Text('Error: ${snapshot.error}');
+              //     } else if (snapshot.hasData) {
+              //       return Text('Token: ${snapshot.data}');
+              //     } else {
+              //       return Text('No token found');
+              //     }
+              //   },
+              // ),
+
+              FutureBuilder<User?>(
+                future: UserPreferenceController().getUser(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasData && snapshot.data != null) {
+                    return Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(20),
                       ),
-                      );
-                    } else {
-                      return const Text('مرحبًا بالزائر');
-                    }
-                  },
-                ),
-                SizedBox(height: 5,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildDashboardCard('إضافة خبر', Icons.post_add, () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewsScreen()));
-                    }),
-                    _buildDashboardCard('إضافة مبادرة', Icons.lightbulb, () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddInitiativeScreen()));
-                    }),
-                  ],
-                ),
-                SizedBox(height: 20),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (c){
-                      return ContactMessagesScreen();
-                    }));
-                  },
-                  child: Container(
-                    height: 100,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: ColorsManager.primary,
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.mark_email_unread, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
-                          Text(
-                            'الطلبات',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                      child: ListTile(
+                        leading: Icon(Icons.person),
+                        title: Text('${snapshot.data!.name}'),
+                        subtitle: Text('${snapshot.data!.email}'),
+                        trailing: Container(
+                          height: 30,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.greenAccent,
                           ),
-                        ],
+                          child: Center(child: Text('${snapshot.data!.role}',
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                          )),
+                        ),
                       ),
+                    );
+                  } else {
+                    return const Text('مرحبًا بالزائر');
+                  }
+                },
+              ),
+
+              SizedBox(height: 10,),
+
+
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildDashboardCard('إضافة خبر', Icons.post_add, () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddNewsScreen()));
+                  }),
+                  _buildDashboardCard('إضافة مبادرة', Icons.lightbulb, () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddInitiativeScreen()));
+                  }),
+                ],
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (c){
+                    return ContactMessagesScreen();
+                  }));
+                },
+                child: Container(
+                  height: 100,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: ColorsManager.primary,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.mark_email_unread, color: Colors.white, size: 40),
+                        SizedBox(height: 8),
+                        Text(
+                          'الطلبات',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+              ),
+              SizedBox(height: 20),
 
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (c){
-                      return ParticipantsScreen(participants: dummyParticipants,);
-                    }));
-                  },
-                  child: Container(
-                    height: 100,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: ColorsManager.primary,
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.man, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
-                          Text(
-                            'المنتسبين للمبادرات',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ],
-                      ),
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (c){
+                    return AddNotificationScreen();
+                  }));
+                },
+                child: Container(
+                  height: 100,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: ColorsManager.primary,
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.notification_add, color: Colors.white, size: 40),
+                        SizedBox(height: 8),
+                        Text(
+                          ' إضافة الإشعارات',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Text(
-                  'الإحصائيات',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                _buildStatisticsCard(),
-                SizedBox(height: 20),
-                Text(
-                  'آخر الأخبار',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                _buildLatestItems(context),
-                SizedBox(height: 20),
-                Text(
-                  'آخر المبادرات',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                _buildLatestInteative(context),
+              ),
+               SizedBox(height: 10,),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Center(
+                     child: Text(
+                       'الإحصائيات',
+                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                     ),
+                   ),
+                 ],
+               ),
+              SizedBox(height: 10,),
+              _buildStatisticsCard(),
+              SizedBox(height: 20),
+              Text(
+                'آخر الأخبار',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              _buildLatestItems(context),
+              SizedBox(height: 20),
+              Text(
+                'آخر المبادرات',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              _buildLatestInteative(context),
 
-                // buildInitiativesSlider(context, completedInitiatives),
+              // buildInitiativesSlider(context, completedInitiatives),
 
-              ],
-            ),
+            ],
           ),
         ),
       ),
@@ -254,7 +312,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
 
   Widget _buildLatestItems(BuildContext context) {
     return  SizedBox(
-      height: 220.h,
+      height: 270.h,
       child: FutureBuilder<List<News>>(
         future: news, // Use the news variable from initState
         builder: (context, snapshot) {
@@ -278,15 +336,20 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewsDetailsScreen(id: newsItem.id.toString()), // Pass the news ID dynamically
-                        ),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => NewsDetailsScreen(
+                      //       newsId: newsItem.id,
+                      //       title: newsItem.title,
+                      //       date: newsItem.newsDate,
+                      //       details: newsItem.details,
+                      //     ), // Pass the news ID dynamically
+                      //   ),
+                      // );
                     },
                     child: Container(
-                      height: 200.h,
+                      height: 240.h,
                       width: 170.w,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -309,16 +372,18 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                                 topLeft: Radius.circular(10),
                               ),
                             ),
-                            child: (newsItem.image != null && newsItem.image!.isNotEmpty)
+                            child:(newsItem.image != null && newsItem.image!.isNotEmpty)
                                 ? Image.network(
-                              '${ApiSettings.PROFILE}/${newsItem.image}', // Build the full URL for the image
+                              'https://pioneer-project-2025.shop/storage/app/public/${newsItem.image}', // Build the full URL for the image
                               fit: BoxFit.cover,
+                              width: double.infinity,
                               errorBuilder: (context, error, stackTrace) =>
                                   Icon(Icons.broken_image),
                             )
                                 : Image.asset(
-                              'assets/news/default_news_image.png',
+                              'assets/news/IMG_8661.jpg',
                               fit: BoxFit.cover,
+                              width: double.infinity,
                             ),
                           ),
                           Padding(
@@ -366,6 +431,42 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                               ),
                             ),
                           ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              InkWell(
+                                onTap: () async {
+                                  bool success = await deleteNews(newsItem.id.toString());
+
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        success ? 'تم حذف الخبر بنجاح' : 'فشل في حذف الخبر',
+                                      ),
+                                      backgroundColor: success ? Colors.green : Colors.red,
+                                    ),
+                                  );
+                                },
+                                child: Icon(Icons.delete, color: Colors.red),
+                              ),
+
+
+                              SizedBox(width: 20,),
+                              InkWell(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                                      return UpdateNewsScreen(newsId: newsItem.id,initialDetails: newsItem.details,initialTitle: newsItem.title,);
+                                    }));
+                                  },
+                                  child: Icon(Icons.edit,color: Colors.blue,)),
+                            ],
+                          ),
+
+
+
                         ],
                       ),
                     ),
@@ -431,11 +532,7 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(
-                              child: Image.asset(
-                                ongoingItem.image.toString(), // تأكد من أن المسار صحيح
-                                height: 40.h,
-                                width: 40.h,
-                              ),
+                              child: Image.asset('assets/organizations/IMG_8672.PNG',height: 60,)
                             ),
                             SizedBox(height: 10.h),
                             Row(
@@ -480,6 +577,59 @@ class _OwnerDashboardScreenState extends State<OwnerDashboardScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(height: 5.h,),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                InkWell(
+                                  onTap: () async {
+                                    bool success = await InitiativesApiController().deleteInitiative(ongoingItem.id.toString());
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          success ? 'تم حذف  بنجاح' : 'فشل في حذف ',
+                                        ),
+                                        backgroundColor: success ? Colors.green : Colors.red,
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(Icons.delete, color: Colors.red),
+                                ),
+
+
+                                SizedBox(width: 20,),
+                                InkWell(
+                                    onTap: (){
+                                      final dateFormat = DateFormat('yyyy-MM-dd');
+
+                                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                                        return UpdateInitiativeScreen(
+                                          initiativeId: ongoingItem.id,        // رقم المبادرة
+                                          name: ongoingItem.name,              // اسم المبادرة
+                                          location: ongoingItem.location,      // الموقع
+                                          startDate: dateFormat.format(ongoingItem.startDate), // ✅ تحويل DateTime إلى String
+                                          endDate: dateFormat.format(ongoingItem.endDate),      // تاريخ الانتهاء (بصيغة yyyy-MM-dd)
+                                          maxParticipants: ongoingItem.maxParticipants, // الحد الأقصى
+                                          details: ongoingItem.details,        // التفاصيل
+                                          hours: ongoingItem.hours,            // عدد الساعات
+                                        );
+                                      }));
+
+                                    },
+                                    child: Icon(Icons.edit,color: Colors.blue,)),
+                                SizedBox(width: 20,),
+
+                                InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (_) {
+                                        return InitiativeParticipantsScreen(initiativeId: ongoingItem.id.toString(),);
+                                      }));
+                                    },
+                                    child: Icon(Icons.remove_red_eye,color: Colors.green,)),
                               ],
                             ),
                           ],

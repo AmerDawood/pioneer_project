@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:pioneer_project/api/controller/auth_api_controller.dart';
 import 'package:pioneer_project/helpers/helpers.dart';
 import 'package:pioneer_project/screens/home/app.dart';
+import 'package:pioneer_project/screens/owner/owner_screen.dart';
 
 import '../../../../../helpers/spacing.dart';
+import '../../../../../perfs/user_preference_controller.dart';
 import '../../../../../widgets/app_text_button.dart';
 import '../../../../../widgets/app_text_form_field.dart';
 import '../../../../home/home_screen.dart';
 import 'dont_hav_an_account_widget.dart';
 import 'forget_password_widgets.dart';
-import 'google_signin_widget.dart';
 
 class EmailAndPassword extends StatefulWidget {
   const EmailAndPassword({super.key});
@@ -90,7 +91,9 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
                         textStyle: TextStyle(
                           color: Colors.white,
                         ),
-                        onPressed: () {
+                        onPressed: () async{
+                          // String? role = await UserPreferenceController().getUserRole();
+                          // print(role);
                           performLogin();
                           // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
                           //   return AppScreen();
@@ -133,18 +136,31 @@ class _EmailAndPasswordState extends State<EmailAndPassword> with Helpers {
 
   Future<void> login() async {
     bool status = await AuthApiController().login(
-        email: _emailEditingController.text,
-        password: _passwordEditingController.text);
-    if (status) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_){
-        return AppScreen();
-      }));
-      showSnackBar(context: context, message: 'Logged In Successfully', error: false);
+      email: _emailEditingController.text,
+      password: _passwordEditingController.text,
+    );
 
+    if (status) {
+      // سحب الدور لتحديد إلى أي شاشة ننتقل
+      String? role = await UserPreferenceController().getUserRole();
+
+      if (role == 'normal_user') {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AppScreen()));
+      } else if (role == 'initiative_owner') {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => OwnerDashboardScreen()));
+      } else {
+        // دور غير معروف
+        showSnackBar(context: context, message: 'دور المستخدم غير معروف', error: true);
+        return;
+      }
+
+      showSnackBar(context: context, message: 'تم تسجيل الدخول بنجاح', error: false);
     } else {
-      showSnackBar(context: context, message: 'Login failed', error: true);
+      showSnackBar(context: context, message: 'فشل تسجيل الدخول', error: true);
     }
   }
+
+
 
 
 }
